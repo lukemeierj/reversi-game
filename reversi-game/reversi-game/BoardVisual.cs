@@ -10,10 +10,14 @@ using System.Windows.Forms;
 
 namespace reversi_game
 {
-    public partial class Form1 : Form
+    public partial class BoardVisual : Form
     {
-        public Form1()
+        private const int BOARD_SIZE = 8;
+        public BoardVisual()
         {
+
+            Game game = new Game(BOARD_SIZE);
+
             InitializeComponent();
         }
     }

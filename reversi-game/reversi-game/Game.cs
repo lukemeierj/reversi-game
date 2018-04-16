@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace reversi_game
 {
+
+    //TODO:
+    /*
+     * If one player can't make a move, alert game and let the other player go instead
+     * Check for possible moves, be able to get() possible moves
+     * Dynamically create grid for game
+     * Make grid pretty
+     * On clicking a grid element, play correct user
+     * When a play is made, flip the appropriote tiles
+     * Check when game finished 
+     * 
+     */
     class Game
     {
         public Game(uint size)
@@ -18,6 +30,11 @@ namespace reversi_game
         {
             board.Place(x, y, player1 ? TileColor.BLACK : TileColor.WHITE);
             player1 = !player1;
+        }
+        //TODO: Not dummy function
+        public bool GameOver()
+        {
+            return false;
         }
 
         //player 1 plays black

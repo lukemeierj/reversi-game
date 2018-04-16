@@ -8,14 +8,12 @@ namespace reversi_game
 {
 
     //TODO:
-    /*
+    /*  Not necessarily in this class...
      * If one player can't make a move, alert game and let the other player go instead
      * Check for possible moves, be able to get() possible moves
-     * Dynamically create grid for game
      * Make grid pretty
-     * On clicking a grid element, play correct user
-     * When a play is made, flip the appropriote tiles
-     * Check when game finished 
+     * Show in UI which player's turn it is
+     * When a play is made, flip the relevant tiles
      * 
      */
     class Game
@@ -26,15 +24,19 @@ namespace reversi_game
             player1 = true;
         }
 
-        public void Place(int x, int y)
+        public Tile Place(int x, int y)
         {
-            board.Place(x, y, player1 ? TileColor.BLACK : TileColor.WHITE);
-            player1 = !player1;
+            Tile placement = board.Place(x, y, player1 ? TileColor.BLACK : TileColor.WHITE);
+            if (placement != null){
+                player1 = !player1;
+            }
+            return placement;
         }
-        //TODO: Not dummy function
+
+
         public bool GameOver()
         {
-            return false;
+            return board.BoardFull();
         }
 
         //player 1 plays black

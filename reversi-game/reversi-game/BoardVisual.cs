@@ -25,9 +25,10 @@ namespace reversi_game
 
         public BoardVisual()
         {
-            Bitmap blank = (Bitmap)Image.FromFile("./green.bmp");
-            Bitmap black = (Bitmap)Image.FromFile("./black.bmp");
-            Bitmap white = (Bitmap)Image.FromFile("./white.bmp");
+            //TODO: Files loaded badly.  Must be in /bin already
+            blank = (Bitmap)Image.FromFile("./green.bmp");
+            black = (Bitmap)Image.FromFile("./black.bmp");
+            white = (Bitmap)Image.FromFile("./white.bmp");
 
             game = new Game(BOARD_SIZE);
 
@@ -52,6 +53,7 @@ namespace reversi_game
 
         }
 
+        #region setup grid
         private void ConfigureForm()
         {
             AutoSize = true;
@@ -64,10 +66,6 @@ namespace reversi_game
                 DataGridViewCellEventHandler(ClickCell);
             gameBoard.SelectionChanged += new
                 EventHandler(Change_Selection);
-            //gameBoard.CellMouseEnter += new
-            //    DataGridViewCellEventHandler(dataGridView1_CellMouseEnter);
-            //gameBoard.CellMouseLeave += new
-            //    DataGridViewCellEventHandler(dataGridView1_CellMouseLeave);
 
             Controls.Add(gameBoard);
         }
@@ -122,12 +120,22 @@ namespace reversi_game
         {
             this.gameBoard.ClearSelection();
         }
+        #endregion
 
-        
+        private void RenderGameOver()
+        {
+            //dummy
+        }
+
         private void ClickCell(object sender, DataGridViewCellEventArgs e)
         {
+            Tile placement = this.game.Place(e.ColumnIndex, e.RowIndex);
+            if (placement == null) return;
+            DataGridViewImageCell cell = (DataGridViewImageCell)
+                gameBoard.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            cell.Value = placement.color == TileColor.BLACK ? black : white;
+            if (game.GameOver()) RenderGameOver();
 
-           this.game.Place(e.ColumnIndex, e.RowIndex);
         }
 
     }

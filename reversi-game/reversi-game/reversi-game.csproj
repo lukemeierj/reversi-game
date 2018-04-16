@@ -81,5 +81,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="black.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="green.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="white.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

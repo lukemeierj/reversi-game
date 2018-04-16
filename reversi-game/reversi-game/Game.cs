@@ -33,6 +33,146 @@ namespace reversi_game
             return placement;
         }
 
+        public List<Tuple<int,int>> PlayablePositions()
+        {
+            List<Tuple<int, int>> possible = board.OpenAdjacentSpots();
+            List<Tuple<int, int>> results = new List<Tuple<int, int>>();
+
+            foreach (Tuple<int,int> coord in possible)
+            {
+                if(IsPlayable(coord.Item1, coord.Item2))
+                {
+                    results.Add(coord);
+                }
+            }
+            return results;
+        }
+
+        public bool IsPlayable(int x, int y)
+        {
+            TileColor playerColor = player1 ? TileColor.BLACK : TileColor.WHITE;
+            TileColor opponentColor = player1 ? TileColor.WHITE : TileColor.BLACK;
+            #region horizontals
+            for (int ix = x; ix >= 0; ix--)
+            {
+                if(ix == x - 1 && board[ix, y].color == playerColor)
+                {
+                    break;
+                }
+
+                if(board[ix, y].color == playerColor)
+                {
+                    return true;
+                }
+            }
+
+            for (int ix = x; ix < board.size; ix++)
+            {
+                if (ix == x + 1 && board[ix, y].color == playerColor)
+                {
+                    break;
+                }
+
+                if (board[ix, y].color == playerColor)
+                {
+                    return true;
+                }
+            }
+            #endregion
+            #region verticals
+            for (int iy = y; iy >= 0; iy--)
+            {
+                if (iy == y - 1 && board[x, iy].color == playerColor)
+                {
+                    break;
+                }
+
+                if (board[x, iy].color == playerColor)
+                {
+                    return true;
+                }
+            }
+
+            for (int iy = y; iy < board.size; iy++)
+            {
+                if (iy == y + 1 && board[x, iy].color == playerColor)
+                {
+                    break;
+                }
+
+                if (board[x, iy].color == playerColor)
+                {
+                    return true;
+                }
+            }
+            #endregion
+
+            for (int ix = x; ix >= 0; ix--)
+            {
+                for (int iy = y; iy >= 0; iy--)
+                {
+                    if (iy == y - 1 && ix == x -1 && board[ix, iy].color == playerColor)
+                    {
+                        break;
+                    }
+
+                    if (board[ix, iy].color == playerColor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            for (int ix = x; ix < board.size; ix++)
+            {
+                for (int iy = y; iy < board.size; iy++)
+                {
+                    if (iy == y + 1 && ix == x + 1 && board[ix, iy].color == playerColor)
+                    {
+                        break;
+                    }
+
+                    if (board[ix, iy].color == playerColor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            for (int ix = x; ix >= 0; ix--)
+            {
+                for (int iy = y; iy < board.size; iy++)
+                {
+                    if (iy == y + 1 && ix == x - 1 && board[ix, iy].color == playerColor)
+                    {
+                        break;
+                    }
+
+                    if (board[ix, iy].color == playerColor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            for (int ix = x; ix < board.size; ix++)
+            {
+                for (int iy = y; iy >= 0; iy--)
+                {
+                    if (iy == y - 1 && ix == x + 1 && board[ix, iy].color == playerColor)
+                    {
+                        break;
+                    }
+
+                    if (board[ix, iy].color == playerColor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         public bool GameOver()
         {

@@ -51,6 +51,20 @@ namespace reversi_game
             CreateColumns();
             CreateRows();
 
+            PlaceFirstFour();
+
+        }
+        //instead should just render the state of the board and place the first 4 elements in the Game or Board class
+        private void PlaceFirstFour()
+        {
+            int x = (BOARD_SIZE - 1) / 2;
+            int y = (BOARD_SIZE - 1) / 2;
+
+            RenderCell(x, y, game.Place(x, y++).color);
+            RenderCell(x, y, game.Place(x++, y).color);
+            RenderCell(x, y, game.Place(x, y--).color);
+            RenderCell(x, y, game.Place(x, y).color);
+
         }
 
         #region setup grid
@@ -131,11 +145,16 @@ namespace reversi_game
         {
             Tile placement = this.game.Place(e.ColumnIndex, e.RowIndex);
             if (placement == null) return;
-            DataGridViewImageCell cell = (DataGridViewImageCell)
-                gameBoard.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            cell.Value = placement.color == TileColor.BLACK ? black : white;
+            RenderCell(e.ColumnIndex, e.RowIndex, placement.color);
             if (game.GameOver()) RenderGameOver();
 
+        }
+
+        private void RenderCell(int x, int y, TileColor color)
+        {
+            DataGridViewImageCell cell = (DataGridViewImageCell)
+               gameBoard.Rows[y].Cells[x];
+            cell.Value = color == TileColor.BLACK ? black : white;
         }
 
     }

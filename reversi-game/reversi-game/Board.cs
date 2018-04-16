@@ -41,6 +41,11 @@ namespace reversi_game
             return true;
         }
 
+        public Tile this[int x, int y]
+        {
+            get { return board[x, y]; }
+        }
+
         public List<Tuple<int, int>> OpenAdjacentSpots()
         {
             List<Tuple<int, int>> openAdjacent = new List<Tuple<int, int>>();
@@ -70,7 +75,7 @@ namespace reversi_game
             return false;
         }
 
-        public Tile[,] board { get; private set; }
-        private uint size;
+        private Tile[,] board;
+        public uint size { get; private set; }
     }
 }

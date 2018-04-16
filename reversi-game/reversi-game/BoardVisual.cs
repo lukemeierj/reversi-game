@@ -25,7 +25,6 @@ namespace reversi_game
 
         public BoardVisual()
         {
-            reversi_game.Properties.Resources test = Properties.Resources.MyImage.Green;
             Bitmap blank = (Bitmap)Image.FromFile("./green.bmp");
             Bitmap black = (Bitmap)Image.FromFile("./black.bmp");
             Bitmap white = (Bitmap)Image.FromFile("./white.bmp");

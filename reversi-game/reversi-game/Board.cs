@@ -89,9 +89,9 @@ namespace reversi_game
              *  
              *  Min and Max so we don't have indexing errors.
              */
-            for(int ix = Math.Max(0, x-1); ix < x+1 && ix < Size; ix++)
+            for(int ix = Math.Max(0, x-1); ix <= x+1 && ix < Size; ix++)
             {
-                for (int iy = Math.Max(0, y - 1); iy < y + 1 && iy < Size; iy++)
+                for (int iy = Math.Max(0, y - 1); iy <= y + 1 && iy < Size; iy++)
                 {
                     if (board[ix, iy] != null) return true;
                 }

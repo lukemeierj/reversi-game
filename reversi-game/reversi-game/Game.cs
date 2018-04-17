@@ -35,23 +35,47 @@ namespace reversi_game
             return placement;
         }
 
+        //play a play at a given position
+        public void UsePlay(Play p)
+        {
+            Place(p.Coords.Item1, p.Coords.Item2);
+            foreach(Tile tile in p.AffectedTiles)
+            {
+                board[tile.Coords.Item1, tile.Coords.Item2].Flip();
+            }
+        }
+
+        public TileColor ColorAt(int x, int y)
+        {
+            if (board[x, y] == null) return TileColor.BLANK;
+            return board[x, y].color;
+        }
+
 
         //find all possible plays given the current game state 
         // this takes into consideration whose turn it is
-        public List<Tuple<int,int>> PossiblePlays()
+        public Dictionary<Tuple<int, int>, Play> PossiblePlays()
         {
             //for all open spots on the board that are adjacent to any tiles
-            List<Tuple<int, int>> possible = board.OpenAdjacentSpots();
-            List<Tuple<int, int>> results = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> possiblePositions = board.OpenAdjacentSpots();
+            Dictionary<Tuple<int, int>, Play> results = new Dictionary<Tuple<int, int>, Play>();
 
+            TileColor playerColor = isPlayer1 ? TileColor.BLACK : TileColor.WHITE;
 
-            foreach (Tuple<int,int> coord in possible)
+            foreach (Tuple<int,int> coord in possiblePositions)
             {
-                //if a given coordinate is a playable move, add it's coordinates
-                if(IsPlayable(coord.Item1, coord.Item2))
+
+                Play possiblePlay = new Play(board, playerColor, coord);
+
+                if(possiblePlay.AffectedTiles != null)
                 {
-                    results.Add(coord);
+                    results.Add(coord, possiblePlay);
                 }
+                ////if a given coordinate is a playable move, add it's coordinates
+                //if(IsPlayable(coord.Item1, coord.Item2))
+                //{
+                //    results.Add(coord);
+                //}
             }
             return results;
         }

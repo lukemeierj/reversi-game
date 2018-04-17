@@ -10,6 +10,7 @@ namespace reversi_game
     {
         WHITE=0,
         BLACK=1,
+        BLANK=2
     }
 
     class Tile
@@ -34,20 +35,20 @@ namespace reversi_game
             //tiles cannot be placed twice.
             if (placed) throw new System.InvalidOperationException("Tile already placed!");
             //store the final position for the tile 
-            coords = Tuple.Create<int, int>(x, y);
+            Coords = Tuple.Create<int, int>(x, y);
             placed = true;
-            return coords;
+            return Coords;
         }
 
         public Tile(TileColor color)
         {
             this.color = color;
-            coords = Tuple.Create(-1, -1);
+            Coords = Tuple.Create(-1, -1);
         }
 
 
         public TileColor color { get; private set; }
         private bool placed = false;
-        private Tuple<int, int> coords;
+        public Tuple<int, int> Coords { private set; get; }
     }
 }

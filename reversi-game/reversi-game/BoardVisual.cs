@@ -22,6 +22,7 @@ namespace reversi_game
         private Bitmap white;
         private int bitmapPadding = 6;
 
+        Dictionary<Tuple<int, int>, Play> playable;
 
         public BoardVisual()
         {
@@ -56,7 +57,7 @@ namespace reversi_game
 
             PlaceFirstFour();
 
-            //List<Tuple<int, int>> playable = game.PossiblePlays();
+            playable = game.PossiblePlays();
 
         }
         //instead should just render the state of the board and place the first 4 elements in the Game or Board class
@@ -65,10 +66,11 @@ namespace reversi_game
             int x = (BOARD_SIZE - 1) / 2;
             int y = (BOARD_SIZE - 1) / 2;
 
-            RenderCell(x, y, game.Place(x, y++).color);
-            RenderCell(x, y, game.Place(x++, y).color);
-            RenderCell(x, y, game.Place(x, y--).color);
-            RenderCell(x, y, game.Place(x, y).color);
+            game.Place(x, y++);
+            game.Place(x++, y);
+            game.Place(x, y--);
+            game.Place(x, y);
+            UpdateBoard();
 
         }
 
@@ -149,10 +151,29 @@ namespace reversi_game
         //whenever we click on a cell
         private void ClickCell(object sender, DataGridViewCellEventArgs e)
         {
-            Tile placement = this.game.Place(e.ColumnIndex, e.RowIndex);
-            if (placement == null) return;
-            RenderCell(e.ColumnIndex, e.RowIndex, placement.color);
-            if (game.GameOver()) RenderGameOver();
+            Tuple<int, int> destCoords = Tuple.Create(e.ColumnIndex, e.RowIndex);
+
+            //if there exists a valid play at this coordinate, get object
+            playable.TryGetValue(destCoords, out Play p);
+
+            //if there was nothing, do nothing
+            if(p != null)
+            {
+                //use the play
+                game.UsePlay(p);
+
+                //rerender
+                UpdateBoard();
+
+                if (game.GameOver())
+                {
+                    RenderGameOver();
+                }
+                else
+                {
+                    playable = game.PossiblePlays();
+                }
+            }            
 
         }
 
@@ -162,6 +183,29 @@ namespace reversi_game
             DataGridViewImageCell cell = (DataGridViewImageCell)
                gameBoard.Rows[y].Cells[x];
             cell.Value = color == TileColor.BLACK ? black : white;
+        }
+
+        private void UpdateBoard()
+        {
+            for(int x = 0; x < BOARD_SIZE; x++)
+            {
+                for(int y = 0; y < BOARD_SIZE; y++)
+                {
+                    DataGridViewImageCell cell = (DataGridViewImageCell)gameBoard.Rows[y].Cells[x];
+                    switch (game.ColorAt(x, y))
+                    {
+                        case TileColor.BLACK:
+                            cell.Value = black;
+                            break;
+                        case TileColor.WHITE:
+                            cell.Value = white;
+                            break;
+                        default:
+                            cell.Value = blank;
+                            break;
+                    }
+                }
+            }
         }
 
     }

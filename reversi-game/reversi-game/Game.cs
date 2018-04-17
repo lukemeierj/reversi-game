@@ -55,6 +55,7 @@ namespace reversi_game
             #region horizontals
             for (int ix = x; ix >= 0; ix--)
             {
+                //broken, i'm going to bed though
                 if(ix == x - 1 && board[ix, y].color == playerColor)
                 {
                     break;

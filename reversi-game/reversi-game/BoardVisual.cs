@@ -53,6 +53,8 @@ namespace reversi_game
 
             PlaceFirstFour();
 
+            List<Tuple<int, int>> playable = game.PlayablePositions();
+
         }
         //instead should just render the state of the board and place the first 4 elements in the Game or Board class
         private void PlaceFirstFour()

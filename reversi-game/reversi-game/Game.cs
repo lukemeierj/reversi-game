@@ -63,135 +63,43 @@ namespace reversi_game
             TileColor playerColor = isPlayer1 ? TileColor.BLACK : TileColor.WHITE;
             TileColor opponentColor = isPlayer1 ? TileColor.WHITE : TileColor.BLACK;
 
-            //@TODO:  This can probably be consolidated using a function
-
-            #region horizontals
-            //check if there are any tiles the move can flip to the left
-            for (int ix = x; ix >= 0; ix--)
+            //generate "ray" to check in each direction
+            //  if the first tile on the ray isn't an opponent's, stop persuing that ray
+            for(double theta = 0.0f; theta < 2*Math.PI; theta += (Math.PI / 4))
             {
-                //broken, i'm going to bed though
-                
-                //if the adjacent tile is the same color you're trying to place
-                //   this would not be a valid play.  
-                if(ix == x - 1 && board[ix, y].color == playerColor)
-                {
-                    break;
-                }
+                // Defines the ray to look along
+                int dx = (int) Math.Round(Math.Cos(theta), MidpointRounding.AwayFromZero);
+                int dy = (int) Math.Round(Math.Sin(theta), MidpointRounding.AwayFromZero);
 
-                //if one of the same color book ends the line, then this is a valid play
-                if(board[ix, y].color == playerColor)
-                {
-                    return true;
-                }
-            }
+                // Keeps track of the current position in the ray
+                int ix = x + dx;
+                int iy = y + dy;
 
-            //check if there are any tiles the move can flip to the right
-            for (int ix = x; ix < board.Size; ix++)
-            {
-                if (ix == x + 1 && board[ix, y].color == playerColor)
+                // while the ray is in bounds
+                while (ix < board.Size && ix >= 0 && iy < board.Size && iy >= 0)
                 {
-                    break;
-                }
 
-                if (board[ix, y].color == playerColor)
-                {
-                    return true;
-                }
-            }
-            #endregion
-            #region verticals
-            //check if there are any tiles the move can flip above
-            for (int iy = y; iy >= 0; iy--)
-            {
-                if (iy == y - 1 && board[x, iy].color == playerColor)
-                {
-                    break;
-                }
-
-                if (board[x, iy].color == playerColor)
-                {
-                    return true;
-                }
-            }
-
-            //check if there are any tiles the move can flip below
-            for (int iy = y; iy < board.Size; iy++)
-            {
-                if (iy == y + 1 && board[x, iy].color == playerColor)
-                {
-                    break;
-                }
-
-                if (board[x, iy].color == playerColor)
-                {
-                    return true;
-                }
-            }
-            #endregion
-
-            //check if there are any tiles the move can flip moving diagonally towards corner at 0,0
-            for (int ix = x; ix >= 0; ix--)
-            {
-                for (int iy = y; iy >= 0; iy--)
-                {
-                    if (iy == y - 1 && ix == x -1 && board[ix, iy].color == playerColor)
+                    //only check the ray if it has an opponent tile as the start of the ray
+                    if (board[x + dx, y + dy] != null && board[x + dx, y + dy].color != opponentColor)
                     {
                         break;
                     }
 
-                    if (board[ix, iy].color == playerColor)
-                    {
-                        return true;
-                    }
-                }
-            }
-            //check if there are any tiles the move can flip moving diagonally towards corner at size-1,size-1
-            for (int ix = x; ix < board.Size; ix++)
-            {
-                for (int iy = y; iy < board.Size; iy++)
-                {
-                    if (iy == y + 1 && ix == x + 1 && board[ix, iy].color == playerColor)
+                    // Break if an empty tile is found
+                    if(board[ix, iy] == null)
                     {
                         break;
                     }
 
+                    // If a player tile is found after an opponent tile, (x,y) is a valid move
                     if (board[ix, iy].color == playerColor)
                     {
                         return true;
-                    }
-                }
-            }
-            //check if there are any tiles the move can flip moving diagonally towards corner at 0,size-1
-            for (int ix = x; ix >= 0; ix--)
-            {
-                for (int iy = y; iy < board.Size; iy++)
-                {
-                    if (iy == y + 1 && ix == x - 1 && board[ix, iy].color == playerColor)
-                    {
-                        break;
                     }
 
-                    if (board[ix, iy].color == playerColor)
-                    {
-                        return true;
-                    }
-                }
-            }
-            //check if there are any tiles the move can flip moving diagonally towards corner at size-1,0
-            for (int ix = x; ix < board.Size; ix++)
-            {
-                for (int iy = y; iy >= 0; iy--)
-                {
-                    if (iy == y - 1 && ix == x + 1 && board[ix, iy].color == playerColor)
-                    {
-                        break;
-                    }
-
-                    if (board[ix, iy].color == playerColor)
-                    {
-                        return true;
-                    }
-                }
+                    ix += dx;
+                    iy += dy;
+                }                
             }
 
             return false;

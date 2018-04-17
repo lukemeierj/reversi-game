@@ -54,7 +54,7 @@ namespace reversi_game
         }
 
         //for each cell in the board, add to a list if
-        //  a) it is empty and b) it has at least one adjacent placed time
+        //  a) it is empty and b) it has at least one adjacent placed tile
         public List<Tuple<int, int>> OpenAdjacentSpots()
         {
             List<Tuple<int, int>> openAdjacent = new List<Tuple<int, int>>();

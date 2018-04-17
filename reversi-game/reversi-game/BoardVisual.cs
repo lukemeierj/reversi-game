@@ -20,6 +20,7 @@ namespace reversi_game
         private Bitmap blank;
         private Bitmap black;
         private Bitmap white;
+        private Bitmap hint;
         private int bitmapPadding = 6;
 
         Dictionary<Tuple<int, int>, Play> playable;
@@ -30,6 +31,8 @@ namespace reversi_game
             blank = (Bitmap)Image.FromFile("./green.bmp");
             black = (Bitmap)Image.FromFile("./black.bmp");
             white = (Bitmap)Image.FromFile("./white.bmp");
+            hint = (Bitmap)Image.FromFile("./hint.bmp");
+
 
             game = new Game(BOARD_SIZE);
 
@@ -70,6 +73,8 @@ namespace reversi_game
             game.Place(x++, y);
             game.Place(x, y--);
             game.Place(x, y);
+
+            playable = game.PossiblePlays();
             UpdateBoard();
 
         }
@@ -162,9 +167,6 @@ namespace reversi_game
                 //use the play
                 game.UsePlay(p);
 
-                //rerender
-                UpdateBoard();
-
                 if (game.GameOver())
                 {
                     RenderGameOver();
@@ -173,6 +175,9 @@ namespace reversi_game
                 {
                     playable = game.PossiblePlays();
                 }
+
+                //rerender
+                UpdateBoard();
             }            
 
         }
@@ -201,7 +206,13 @@ namespace reversi_game
                             cell.Value = white;
                             break;
                         default:
-                            cell.Value = blank;
+                            if (playable != null && playable.ContainsKey(Tuple.Create(x, y)))
+                            {
+                                cell.Value = hint;
+                            } else
+                            {
+                                cell.Value = blank;
+                            }
                             break;
                     }
                 }

@@ -71,64 +71,11 @@ namespace reversi_game
                 {
                     results.Add(coord, possiblePlay);
                 }
-                ////if a given coordinate is a playable move, add it's coordinates
-                //if(IsPlayable(coord.Item1, coord.Item2))
-                //{
-                //    results.Add(coord);
-                //}
             }
             return results;
         }
 
-        //determine if a position is playable given which player's turn it is
-        public bool IsPlayable(int x, int y)
-        {
-            //takes play
-            TileColor playerColor = isPlayer1 ? TileColor.BLACK : TileColor.WHITE;
-            TileColor opponentColor = isPlayer1 ? TileColor.WHITE : TileColor.BLACK;
-
-            //generate "ray" to check in each direction
-            //  if the first tile on the ray isn't an opponent's, stop persuing that ray
-            for(double theta = 0.0f; theta < 2*Math.PI; theta += (Math.PI / 4))
-            {
-                // Defines the ray to look along
-                int dx = (int) Math.Round(Math.Cos(theta), MidpointRounding.AwayFromZero);
-                int dy = (int) Math.Round(Math.Sin(theta), MidpointRounding.AwayFromZero);
-
-                // Keeps track of the current position in the ray
-                int ix = x + dx;
-                int iy = y + dy;
-
-                // while the ray is in bounds
-                while (ix < board.Size && ix >= 0 && iy < board.Size && iy >= 0)
-                {
-
-                    //only check the ray if it has an opponent tile as the start of the ray
-                    if (board[x + dx, y + dy] != null && board[x + dx, y + dy].color != opponentColor)
-                    {
-                        break;
-                    }
-
-                    // Break if an empty tile is found
-                    if(board[ix, iy] == null)
-                    {
-                        break;
-                    }
-
-                    // If a player tile is found after an opponent tile, (x,y) is a valid move
-                    if (board[ix, iy].color == playerColor)
-                    {
-                        return true;
-                    }
-
-                    ix += dx;
-                    iy += dy;
-                }                
-            }
-
-            return false;
-        }
-
+      
         //right now, our only game over condition is a full board.
         public bool GameOver()
         {

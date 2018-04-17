@@ -11,26 +11,32 @@ namespace reversi_game
         public Board(uint size)
         {
             this.board = new Tile[size, size];
-            this.size = size;
+            this.Size = size;
         }
 
+        //place put a color tile on the board
         public Tile Place(int x, int y, TileColor color)
         {
+            //if a tile already exists here, don't place anything
+            // @TODO:  Consider throwing an exception if the color placed does not match the goal color 
             if(board[x,y] != null)
             {
                 return null;
             }
+            //create a new tile of the correct color
             Tile placement = new Tile(color);
+            //store coordinates in the Tile object, and store the object reference in the board.
             placement.Place(x, y);
             board[x, y] = placement;
             return placement;
         }
 
+        //check if the board has any empty cells
         public bool BoardFull()
         {
-            for(int x = 0; x < size; x++)
+            for(int x = 0; x < Size; x++)
             {
-                for (int y = 0; y < size; y++)
+                for (int y = 0; y < Size; y++)
                 {
                     if(board[x,y] == null)
                     {
@@ -41,19 +47,24 @@ namespace reversi_game
             return true;
         }
 
+        //access board through [x,y] accessors
         public Tile this[int x, int y]
         {
             get { return board[x, y]; }
         }
 
+        //for each cell in the board, add to a list if
+        //  a) it is empty and b) it has at least one adjacent placed time
         public List<Tuple<int, int>> OpenAdjacentSpots()
         {
             List<Tuple<int, int>> openAdjacent = new List<Tuple<int, int>>();
-            for (int x = 0; x < size; x++)
+            //for each cell in the board
+            for (int x = 0; x < Size; x++)
             {
-                for (int y = 0; y < size; y++)
+                for (int y = 0; y < Size; y++)
                 {
-                    if (AdjacentToTile(x,y))
+                    //both empty and adjacent to a tile
+                    if (board[x,y] == null && AdjacentToTile(x,y))
                     {
                         openAdjacent.Add(Tuple.Create(x, y));
                     }
@@ -62,11 +73,25 @@ namespace reversi_game
             return openAdjacent;
         }
 
+        //check to see if the cell at x,y is adjacent to any placed tiles
         private bool AdjacentToTile(int x, int y)
         {
-            for(int ix = Math.Max(0, x-1); ix < x+1 && ix < size; ix++)
+            /*
+             *  x x x x x
+             *  x c c c x 
+             *  x c O c x
+             *  x c c c x 
+             *  x x x x x
+             *  
+             *  Where x,y is the position of O, 
+             *     check each cell c to see if a tile is placed anywhere adjacent
+             *  x-1 is right before the position, x+1 is right after. Likewise for y.
+             *  
+             *  Min and Max so we don't have indexing errors.
+             */
+            for(int ix = Math.Max(0, x-1); ix < x+1 && ix < Size; ix++)
             {
-                for (int iy = Math.Max(0, y - 1); iy < y + 1 && iy < size; iy++)
+                for (int iy = Math.Max(0, y - 1); iy < y + 1 && iy < Size; iy++)
                 {
                     if (board[ix, iy] != null) return true;
                 }
@@ -76,6 +101,6 @@ namespace reversi_game
         }
 
         private Tile[,] board;
-        public uint size { get; private set; }
+        public uint Size { get; private set; }
     }
 }

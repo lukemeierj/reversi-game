@@ -34,6 +34,7 @@ namespace reversi_game
 
             InitializeComponent();
 
+            //add the data grid that has all the images 
             gameBoard = new DataGridView
             {
                 BackColor = SystemColors.ButtonShadow,
@@ -46,6 +47,8 @@ namespace reversi_game
             };
 
             gameBoard.AllowUserToAddRows = false;
+
+            //mostly from online 
             ConfigureForm();
             SizeGrid();
             CreateColumns();
@@ -53,7 +56,7 @@ namespace reversi_game
 
             PlaceFirstFour();
 
-            List<Tuple<int, int>> playable = game.PlayablePositions();
+            //List<Tuple<int, int>> playable = game.PossiblePlays();
 
         }
         //instead should just render the state of the board and place the first 4 elements in the Game or Board class
@@ -143,6 +146,7 @@ namespace reversi_game
             //dummy
         }
 
+        //whenever we click on a cell
         private void ClickCell(object sender, DataGridViewCellEventArgs e)
         {
             Tile placement = this.game.Place(e.ColumnIndex, e.RowIndex);
@@ -152,6 +156,7 @@ namespace reversi_game
 
         }
 
+        //update a cell based on a new color at a position x,y
         private void RenderCell(int x, int y, TileColor color)
         {
             DataGridViewImageCell cell = (DataGridViewImageCell)

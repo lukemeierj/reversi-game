@@ -14,6 +14,7 @@ namespace reversi_game
 
     class Tile
     {
+        //If the tile is white, flip it to black and vis versa 
         public TileColor Flip()
         {
             if (color == TileColor.WHITE)
@@ -27,9 +28,12 @@ namespace reversi_game
             return color;
         }
 
+        //place a tile in an x,y coordinate.  
         public Tuple<int, int> Place(int x, int y)
         {
+            //tiles cannot be placed twice.
             if (placed) throw new System.InvalidOperationException("Tile already placed!");
+            //store the final position for the tile 
             coords = Tuple.Create<int, int>(x, y);
             placed = true;
             return coords;

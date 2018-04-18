@@ -62,6 +62,8 @@ namespace reversi_game
 
             playable = game.PossiblePlays();
 
+            UpdateBoard();
+
         }
         //instead should just render the state of the board and place the first 4 elements in the Game or Board class
         private void PlaceFirstFour()
@@ -73,10 +75,6 @@ namespace reversi_game
             game.Place(x++, y);
             game.Place(x, y--);
             game.Place(x, y);
-
-            playable = game.PossiblePlays();
-            UpdateBoard();
-
         }
 
         #region setup grid
@@ -182,14 +180,7 @@ namespace reversi_game
 
         }
 
-        //update a cell based on a new color at a position x,y
-        private void RenderCell(int x, int y, TileColor color)
-        {
-            DataGridViewImageCell cell = (DataGridViewImageCell)
-               gameBoard.Rows[y].Cells[x];
-            cell.Value = color == TileColor.BLACK ? black : white;
-        }
-
+        //set gameboard view to represent the game's board state
         private void UpdateBoard()
         {
             for(int x = 0; x < BOARD_SIZE; x++)
@@ -206,6 +197,7 @@ namespace reversi_game
                             cell.Value = white;
                             break;
                         default:
+                            //if a place is playable, show as a hint
                             if (playable != null && playable.ContainsKey(Tuple.Create(x, y)))
                             {
                                 cell.Value = hint;

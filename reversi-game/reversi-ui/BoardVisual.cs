@@ -8,8 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using ReversiGame;
+using ReversiAI;
 
-namespace reversi_game
+namespace ReversiUI
 {
     public partial class BoardVisual : Form
     {
@@ -22,6 +24,7 @@ namespace reversi_game
         private Bitmap white;
         private Bitmap hint;
         private int bitmapPadding = 6;
+        private ReversiSolver s;
 
         Dictionary<Tuple<int, int>, Play> playable;
 

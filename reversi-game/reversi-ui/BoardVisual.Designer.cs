@@ -1,4 +1,4 @@
-﻿namespace reversi_game
+﻿namespace ReversiUI
 {
     partial class BoardVisual
     {

@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reversi-game", "reversi-game\reversi-game.csproj", "{E8646764-136D-47B9-B4F9-6F1F7F1A1F8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reversi-ui", "reversi-ui\reversi-ui.csproj", "{E8646764-136D-47B9-B4F9-6F1F7F1A1F8A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-game", "reversi-game\reversi-game.shproj", "{0C8DA75E-B1AD-4733-B8EF-498EBF60074B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-ai", "reversi-ai\reversi-ai.shproj", "{7D1E7BE4-641B-413C-AF44-B4BBB46B0FDD}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		reversi-game\reversi-game.projitems*{0c8da75e-b1ad-4733-b8ef-498ebf60074b}*SharedItemsImports = 13
+		reversi-ai\reversi-ai.projitems*{7d1e7be4-641b-413c-af44-b4bbb46b0fdd}*SharedItemsImports = 13
+		reversi-ai\reversi-ai.projitems*{e8646764-136d-47b9-b4f9-6f1f7f1a1f8a}*SharedItemsImports = 4
+		reversi-game\reversi-game.projitems*{e8646764-136d-47b9-b4f9-6f1f7f1a1f8a}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

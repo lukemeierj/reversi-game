@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace reversi_game.Properties
+namespace ReversiGame.Properties
 {
 
 

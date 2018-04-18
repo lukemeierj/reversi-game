@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace reversi_game
+namespace ReversiGame
 {
     // Stores the affected tiles
     class Play

@@ -14,6 +14,12 @@ namespace ReversiGame
             this.Size = size;
         }
 
+        public Board(Board prevBoard)
+        {
+            this.board = (Tile[,])prevBoard.board.Clone();
+            this.Size = prevBoard.Size;
+        }
+
         //place put a color tile on the board
         public Tile Place(int x, int y, TileColor color)
         {

@@ -18,10 +18,21 @@ namespace ReversiGame
      */
     class Game
     {
+        //player 1 plays black.
+        //when true, the active player is player1.
+        public bool isPlayer1 { private set; get; }
+        private Board board;
+
         public Game(uint size)
         {
             board = new Board(size);
             isPlayer1 = true;
+        }
+
+        public Game(Game prevGame)
+        {
+            this.board = new Board(prevGame.board);
+            this.isPlayer1 = prevGame.isPlayer1;
         }
 
         //place a tile at a position
@@ -82,9 +93,6 @@ namespace ReversiGame
             return board.BoardFull();
         }
 
-        //player 1 plays black.
-        //when true, the active player is player1.
-        public bool isPlayer1 { private set; get; }
-        private Board board;
+
     }
 }

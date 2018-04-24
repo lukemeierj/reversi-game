@@ -56,6 +56,18 @@ namespace ReversiGame
             }
         }
 
+        /// <summary>
+        /// Returns a new game advanced by the single move play
+        /// </summary>
+        /// <param name="play">Move to increment the game by</param>
+        /// <returns>A new game advanced by move play</returns>
+        public Game ForkGame(Play play)
+        {
+            Game g = new Game(this);
+            g.UsePlay(play);
+            return g;
+        }
+
         public TileColor ColorAt(int x, int y)
         {
             if (board[x, y] == null) return TileColor.BLANK;

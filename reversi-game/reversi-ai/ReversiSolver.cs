@@ -30,7 +30,7 @@ namespace ReversiAI
         /// <param name="beta">Lowest value seen so far</param>
         /// <param name="ply">The depth to search the game</param>
         /// <returns></returns>
-        private static Tuple<int,Play> AlphaBeta(Game game, Func<Game,int> heuristic, int alpha = int.MinValue, int beta = int.MaxValue, int ply=5)
+        private static Tuple<int,Play> AlphaBeta(Game game, Func<Game,int> heuristic, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue, int ply=5)
         {
             // If exit case
             if(ply == 0 || game.GameOver())
@@ -39,11 +39,11 @@ namespace ReversiAI
             }
             // if player is black, then try to maximize
             // else, try to minimize
-            Func<int, int, int> Optimizer = game.IsPlayer1 ? (Func < int, int, int >)Math.Max : (Func < int, int, int > )Math.Min;
+            Func<int, int, int> Optimizer = max ? (Func < int, int, int >)Math.Max : (Func < int, int, int > )Math.Min;
 
             // if player 1 (max/black), start at the lowest score and try to improve
             // if player 2 (min/white), start at best score and try to decrease score
-            int x = game.IsPlayer1 ? int.MinValue : int.MaxValue;
+            int bestScore = max ? int.MinValue : int.MaxValue;
 
             // The highest value found by the function so far.
             //  Set to the lowest possible value so any value is higher.
@@ -54,32 +54,39 @@ namespace ReversiAI
             foreach (KeyValuePair<Tuple<int,int>,Play> pair in game.PossiblePlays())
             {
                 // Takes the max between the branch and the current minimum value
-                int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, alpha, beta, ply - 1).Item1;
+                int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, !max, alpha, beta, ply - 1).Item1;
 
                 // If the new value is better, save it and the move that yields it
-                if (x != Optimizer(x, childScore))
+                if (bestScore != Optimizer(bestScore, childScore))
                 {
                     bestPlay = pair.Value;
-                    x = childScore;
+                    bestScore = childScore;
                 }
-                beta = Optimizer(x, beta);
+
+                if (max)
+                    alpha = Optimizer(alpha, bestScore);
+                else
+                    beta = Optimizer(beta, bestScore);
+
                 if (beta <= alpha)
-                {
-                    Console.WriteLine("Prune at ply = " + ply);
                     break;
-                }
             }
-            return new Tuple<int, Play>(x, bestPlay);
+            return new Tuple<int, Play>(bestScore, bestPlay);
            
         }
 
+
+        public static Func<Game, int> GetForColor(Func<Game, TileColor, int> function, TileColor color)
+        {
+            return (game) => function(game, color);
+        }
 
         /// <summary>
         /// Calculates the heuristic value based on the difference of black tiles and white tiles
         /// </summary>
         /// <param name="game">Game in the state the move needs to be calculated in</param>
         /// <returns></returns>
-        public static int BasicHeuristic(Game game)
+        public static int BasicHeuristic(Game game, TileColor color)
         {
             int black = 0;
             int white = 0;
@@ -103,16 +110,27 @@ namespace ReversiAI
 
             if (game.GameOver())
             {
-                if(black > white)
+                if(color == TileColor.BLACK && black > white
+                    || color == TileColor.WHITE && white > black)
                 {
-                    return (int) game.Board.Size * (int) game.Board.Size;
-                } else if (black < white)
+                    return 100;
+                }
+                else
                 {
-                    return - (int)game.Board.Size * (int)game.Board.Size;
+                    return 0;
                 }
             }
 
-            return black - white;
+            if (color == TileColor.BLACK)
+            {
+                return black - white;
+            }
+            else if (color == TileColor.WHITE)
+            {
+                return white - black;
+            }
+            else
+                return 0;
         }
     }
 }

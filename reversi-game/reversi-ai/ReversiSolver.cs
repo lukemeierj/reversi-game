@@ -57,14 +57,17 @@ namespace ReversiAI
                 int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, alpha, beta, ply - 1).Item1;
 
                 // If the new value is better, save it and the move that yields it
-                if (x != Math.Max(x, childScore))
+                if (x != Optimizer(x, childScore))
                 {
                     bestPlay = pair.Value;
                     x = childScore;
                 }
                 beta = Optimizer(x, beta);
                 if (beta <= alpha)
+                {
+                    Console.WriteLine("Prune at ply = " + ply);
                     break;
+                }
             }
             return new Tuple<int, Play>(x, bestPlay);
            

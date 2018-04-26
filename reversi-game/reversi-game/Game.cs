@@ -20,28 +20,28 @@ namespace ReversiGame
     {
         //player 1 plays black.
         //when true, the active player is player1.
-        public bool isPlayer1 { private set; get; }
-        private Board board;
+        public bool IsPlayer1 { private set; get; }
+        public Board Board { private set; get; }
 
         public Game(uint size)
         {
-            board = new Board(size);
-            isPlayer1 = true;
+            Board = new Board(size);
+            IsPlayer1 = true;
         }
 
         public Game(Game prevGame)
         {
-            this.board = new Board(prevGame.board);
-            this.isPlayer1 = prevGame.isPlayer1;
+            Board = new Board(prevGame.Board);
+            IsPlayer1 = prevGame.IsPlayer1;
         }
 
         //place a tile at a position
         // the color of the tile is determined by whose turn it is
         public Tile Place(int x, int y)
         {
-            Tile placement = board.Place(x, y, isPlayer1 ? TileColor.BLACK : TileColor.WHITE);
+            Tile placement = Board.Place(x, y, IsPlayer1 ? TileColor.BLACK : TileColor.WHITE);
             if (placement != null){
-                isPlayer1 = !isPlayer1;
+                IsPlayer1 = !IsPlayer1;
             }
             return placement;
         }
@@ -52,7 +52,13 @@ namespace ReversiGame
             Place(p.Coords.Item1, p.Coords.Item2);
             foreach(Tile tile in p.AffectedTiles)
             {
-                board[tile.Coords.Item1, tile.Coords.Item2].Flip();
+                Board[tile.Coords.Item1, tile.Coords.Item2].Flip();
+            }
+
+            // Handle case where next player has no moves
+            if(PossiblePlays().Count == 0)
+            {
+                IsPlayer1 = !IsPlayer1;
             }
         }
 
@@ -70,8 +76,8 @@ namespace ReversiGame
 
         public TileColor ColorAt(int x, int y)
         {
-            if (board[x, y] == null) return TileColor.BLANK;
-            return board[x, y].color;
+            if (Board[x, y] == null) return TileColor.BLANK;
+            return Board[x, y].color;
         }
 
 
@@ -80,15 +86,15 @@ namespace ReversiGame
         public Dictionary<Tuple<int, int>, Play> PossiblePlays()
         {
             //for all open spots on the board that are adjacent to any tiles
-            List<Tuple<int, int>> possiblePositions = board.OpenAdjacentSpots();
+            List<Tuple<int, int>> possiblePositions = Board.OpenAdjacentSpots();
             Dictionary<Tuple<int, int>, Play> results = new Dictionary<Tuple<int, int>, Play>();
 
-            TileColor playerColor = isPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+            TileColor playerColor = IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
 
             foreach (Tuple<int,int> coord in possiblePositions)
             {
 
-                Play possiblePlay = new Play(board, playerColor, coord);
+                Play possiblePlay = new Play(Board, playerColor, coord);
 
                 if(possiblePlay.AffectedTiles != null)
                 {
@@ -102,7 +108,7 @@ namespace ReversiGame
         //right now, our only game over condition is a full board.
         public bool GameOver()
         {
-            return board.BoardFull();
+            return Board.BoardFull();
         }
 
 

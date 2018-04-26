@@ -18,16 +18,7 @@ namespace ReversiAI
         /// <returns></returns>
         public static Play ChoosePlay(Game game, Func<Game, int> heuristic)
         {
-            Dictionary<Tuple<int,int>, Play> possible = game.PossiblePlays();
-
-            //look at the game as if we played a move for any given move
-            foreach(KeyValuePair<Tuple<int,int>, Play> item in possible){
-                Play play = item.Value;
-                Game potentialGame = new Game(game);
-                game.UsePlay(play);
-
-            }
-            return null;
+            return AlphaBeta(game, heuristic).Item2;
         }
 
         /// <summary>
@@ -39,11 +30,8 @@ namespace ReversiAI
         /// <param name="beta">Lowest value seen so far</param>
         /// <param name="ply">The depth to search the game</param>
         /// <returns></returns>
-        private Tuple<int,Play> AlphaBeta(Game game, Func<Game,int> heuristic, int alpha = int.MinValue, int beta = int.MaxValue, int ply=13)
+        private static Tuple<int,Play> AlphaBeta(Game game, Func<Game,int> heuristic, int alpha = int.MinValue, int beta = int.MaxValue, int ply=5)
         {
-            // May not be needed if we can return null
-            Play blankPlay = new Play(TileColor.BLANK, new Tuple<int, int>(0, 0));
-
             // If exit case
             if(ply == 0 || game.GameOver())
             {
@@ -51,7 +39,7 @@ namespace ReversiAI
             }
 
             // If max (black) turn
-            if (game.isPlayer1)
+            if (game.IsPlayer1)
             {
                 // The highest value found by the function so far.
                 //  Set to the lowest possible value so any value is higher.
@@ -101,6 +89,48 @@ namespace ReversiAI
                 }
                 return new Tuple<int, Play>(x, bestPlay);
             }
+        }
+
+
+        /// <summary>
+        /// Calculates the heuristic value based on the difference of black tiles and white tiles
+        /// </summary>
+        /// <param name="game">Game in the state the move needs to be calculated in</param>
+        /// <returns></returns>
+        public static int BasicHeuristic(Game game)
+        {
+            int black = 0;
+            int white = 0;
+            for(int i = 0; i < game.Board.Size; i++)
+            {
+                for (int j = 0; j < game.Board.Size; j++)
+                {
+                    switch (game.ColorAt(i, j))
+                    {
+                        case TileColor.BLACK:
+                            black++;
+                            break;
+                        case TileColor.WHITE:
+                            white++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            if (game.GameOver())
+            {
+                if(black > white)
+                {
+                    return (int) game.Board.Size * (int) game.Board.Size;
+                } else if (black < white)
+                {
+                    return - (int)game.Board.Size * (int)game.Board.Size;
+                }
+            }
+
+            return black - white;
         }
     }
 }

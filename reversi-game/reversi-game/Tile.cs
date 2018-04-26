@@ -13,6 +13,7 @@ namespace ReversiGame
         BLANK=2
     }
 
+    [Serializable]
     class Tile
     {
         //If the tile is white, flip it to black and vis versa 

@@ -1,23 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ReversiGame
 {
+    [Serializable]
     class Board
     {
         public Board(uint size)
         {
-            this.board = new Tile[size, size];
-            this.Size = size;
+            board = new Tile[size, size];
+            Size = size;
         }
 
         public Board(Board prevBoard)
         {
-            this.board = (Tile[,])prevBoard.board.Clone();
-            this.Size = prevBoard.Size;
+            Size = prevBoard.Size;
+            board = DeepClone(prevBoard).board;
+            
+        }
+
+        /// <summary>
+        /// Allows board to be deep copied
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Board DeepClone(Board obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+
+                return (Board)formatter.Deserialize(ms);
+            }
         }
 
         //place put a color tile on the board

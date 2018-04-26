@@ -37,58 +37,37 @@ namespace ReversiAI
             {
                 return new Tuple<int,Play>(heuristic(game),null);
             }
+            // if player is black, then try to maximize
+            // else, try to minimize
+            Func<int, int, int> Optimizer = game.IsPlayer1 ? (Func < int, int, int >)Math.Max : (Func < int, int, int > )Math.Min;
 
-            // If max (black) turn
-            if (game.IsPlayer1)
+            // if player 1 (max/black), start at the lowest score and try to improve
+            // if player 2 (min/white), start at best score and try to decrease score
+            int x = game.IsPlayer1 ? int.MinValue : int.MaxValue;
+
+            // The highest value found by the function so far.
+            //  Set to the lowest possible value so any value is higher.
+            Play bestPlay = null;
+
+            // For each possible game from plays
+            // Use Game.ForkGame(Play) to generate different branches
+            foreach (KeyValuePair<Tuple<int,int>,Play> pair in game.PossiblePlays())
             {
-                // The highest value found by the function so far.
-                //  Set to the lowest possible value so any value is higher.
-                int x = int.MinValue;
-                Play bestPlay = null;
+                // Takes the max between the branch and the current minimum value
+                int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, alpha, beta, ply - 1).Item1;
 
-                // For each possible game from plays
-                // Use Game.ForkGame(Play) to generate different branches
-                foreach (KeyValuePair<Tuple<int,int>,Play> pair in game.PossiblePlays())
+                // If the new value is better, save it and the move that yields it
+                if (x != Math.Max(x, childScore))
                 {
-                    // Takes the max between the branch and the current minimum value
-                    int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, alpha, beta, ply - 1).Item1;
-
-                    // If the new value is better, save it and the move that yields it
-                    if (x != Math.Max(x, childScore))
-                    {
-                        bestPlay = pair.Value;
-                        x = childScore;
-                    }
-                    beta = Math.Max(x, beta);
-                    if (beta <= alpha)
-                        break;
+                    bestPlay = pair.Value;
+                    x = childScore;
                 }
-                return new Tuple<int, Play>(x, bestPlay);
+                beta = Optimizer(x, beta);
+                if (beta <= alpha)
+                    break;
             }
-            else { // If min (white) turn
-                // The lowest value found by the function so far.
-                //  Set to the maximum possible value so any value is lower.
-                int x = int.MaxValue;
-                Play bestPlay = null;
-
-                // For each possible game from plays
-                // Use Game.ForkGame(Play) to generate different branches
-                foreach (KeyValuePair<Tuple<int, int>, Play> pair in game.PossiblePlays())
-                {
-                    // Takes the max between the branch and the current minimum value
-                    int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, alpha, beta, ply - 1).Item1;
-                    // If the new value is better, save it and the move that yields it
-                    if (x != Math.Min(x, childScore))
-                    {
-                        bestPlay = pair.Value;
-                        x = childScore;
-                    }
-                    beta = Math.Min(x, beta);
-                    if (beta <= alpha)
-                        break;
-                }
-                return new Tuple<int, Play>(x, bestPlay);
-            }
+            return new Tuple<int, Play>(x, bestPlay);
+           
         }
 
 

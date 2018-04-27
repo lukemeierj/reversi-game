@@ -10,8 +10,10 @@ namespace ReversiGame
         private Game game;
         public ReversiSolver[] Agents = new ReversiSolver[2];
 
-        public GameManager(Func<Game, int> heuristic1, int ply1, Func<Game, int> heuristic2, int ply2)
+        public GameManager(Func<Game, int> heuristic1, int ply1, Func<Game, int> heuristic2, int ply2, uint size = 8)
         {
+            //8x8 board
+            game = new Game(size);
             Agents[0] = new ReversiSolver(TileColor.BLACK, heuristic1, ply1);
             Agents[1] = new ReversiSolver(TileColor.WHITE, heuristic2, ply2);
         }

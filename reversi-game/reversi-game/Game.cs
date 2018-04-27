@@ -25,8 +25,17 @@ namespace ReversiGame
 
         public Game(uint size)
         {
+
             Board = new Board(size);
             IsPlayer1 = true;
+            int x = ((int)size - 1) / 2;
+            int y = ((int)size - 1) / 2;
+
+            //place first four tiles
+            Place(x, y++);
+            Place(x++, y);
+            Place(x, y--);
+            Place(x, y);
         }
 
         public Game(Game prevGame)

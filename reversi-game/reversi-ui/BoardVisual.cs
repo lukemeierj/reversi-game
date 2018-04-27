@@ -61,24 +61,13 @@ namespace ReversiUI
             CreateColumns();
             CreateRows();
 
-            PlaceFirstFour();
 
             playable = game.PossiblePlays();
 
             UpdateBoard();
 
         }
-        //instead should just render the state of the board and place the first 4 elements in the Game or Board class
-        private void PlaceFirstFour()
-        {
-            int x = (BOARD_SIZE - 1) / 2;
-            int y = (BOARD_SIZE - 1) / 2;
 
-            game.Place(x, y++);
-            game.Place(x++, y);
-            game.Place(x, y--);
-            game.Place(x, y);
-        }
 
         #region setup grid
         private void ConfigureForm()

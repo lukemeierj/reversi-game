@@ -15,8 +15,17 @@ namespace ReversiUI
 {
     public partial class BoardVisual : Form
     {
-       
+
+        enum GameMode
+        {
+            PvP,
+            PvC,
+            CvP,
+            CvC
+        }
+
         private Game game;
+        private GameMode mode = GameMode.PvP;
         private DataGridView gameBoard;
         private const int BOARD_SIZE = 8;
         private Bitmap blank;
@@ -74,16 +83,13 @@ namespace ReversiUI
         {
             AutoSize = true;
 
-
-            gameBoard = new System.Windows.Forms.DataGridView();
-            gameBoard.Location = new Point(120, 0);
             gameBoard.AllowUserToAddRows = false;
             gameBoard.CellClick += new
                 DataGridViewCellEventHandler(ClickCell);
             gameBoard.SelectionChanged += new
                 EventHandler(Change_Selection);
 
-            Controls.Add(gameBoard);
+            GamePanel.Controls.Add(gameBoard);
         }
 
 
@@ -203,5 +209,24 @@ namespace ReversiUI
             }
         }
 
+        private void ChangeGameMode(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            switch (c.Tag)
+            {
+                case "PvP":
+                    mode = GameMode.PvP;
+                    break;
+                case "PvC":
+                    mode = GameMode.PvC;
+                    break;
+                case "CvP":
+                    mode = GameMode.CvP;
+                    break;
+                case "CvC":
+                    mode = GameMode.CvC;
+                    break;
+            }
+        }
     }
 }

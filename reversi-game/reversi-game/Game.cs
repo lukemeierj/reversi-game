@@ -6,16 +6,6 @@ using System.Threading.Tasks;
 
 namespace ReversiGame
 {
-
-    //TODO:
-    /*  Not necessarily in this class...
-     * If one player can't make a move, alert game and let the other player go instead
-     * Check for possible moves, be able to get() possible moves
-     * Make grid pretty
-     * Show in UI which player's turn it is
-     * When a play is made, flip the relevant tiles
-     * 
-     */
     class Game
     {
         //player 1 plays black.

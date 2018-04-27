@@ -9,16 +9,28 @@ namespace ReversiAI
     /// </summary>
     class ReversiSolver
     {
+        private Func<Game, int> heuristic;
+        public int MaxPly { private set; get; }
+        public TileColor Color { private set; get; }
+
+        public ReversiSolver(TileColor color, Func<Game, int> heuristic, int ply)
+        {
+            Color = color;
+            this.heuristic = heuristic;
+            MaxPly = ply;
+        }
+
+
         /// <summary>
         /// Takes a game object and returns the best move given the heuristic for the current player
         /// </summary>
         /// <param name="game">The game in the state that needs to be searched from</param>
-        /// <param name="heuristic">Assigns an integer score to a game object for the black player.
-        /// Higher numbers are better</param>
+        /// <param name="ply">The depth the agent will search and calculate heuristics</param>
         /// <returns></returns>
-        public static Play ChoosePlay(Game game, Func<Game, int> heuristic)
+        public Play ChoosePlay(Game game)
         {
-            return AlphaBeta(game, heuristic).Item2;
+            game = new Game(game);
+            return AlphaBeta(game, MaxPly).Item2;
         }
 
         /// <summary>
@@ -30,7 +42,7 @@ namespace ReversiAI
         /// <param name="beta">Lowest value seen so far</param>
         /// <param name="ply">The depth to search the game</param>
         /// <returns></returns>
-        private static Tuple<int,Play> AlphaBeta(Game game, Func<Game,int> heuristic, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue, int ply=5)
+        private Tuple<int,Play> AlphaBeta(Game game, int ply = 5, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue)
         {
             // If exit case
             if(ply == 0 || game.GameOver())
@@ -54,7 +66,7 @@ namespace ReversiAI
             foreach (KeyValuePair<Tuple<int,int>,Play> pair in game.PossiblePlays())
             {
                 // Takes the max between the branch and the current minimum value
-                int childScore = AlphaBeta(game.ForkGame(pair.Value), heuristic, !max, alpha, beta, ply - 1).Item1;
+                int childScore = AlphaBeta(game.ForkGame(pair.Value), ply - 1, !max, alpha, beta).Item1;
 
                 // If the new value is better, save it and the move that yields it
                 if (bestScore != Optimizer(bestScore, childScore))
@@ -75,10 +87,14 @@ namespace ReversiAI
            
         }
 
-
-        public static Func<Game, int> GetForColor(Func<Game, TileColor, int> function, TileColor color)
+        /// <summary>
+        /// Sets the heuristic function for a solver
+        /// </summary>
+        /// <param name="heuristic">This is the function, taking game and color</param>
+        /// <param name="color">The color this solver will play as</param>
+        public void SetHeuristic(Func<Game, TileColor, int> heuristic)
         {
-            return (game) => function(game, color);
+            this.heuristic = (game) => heuristic(game, Color);
         }
 
         /// <summary>

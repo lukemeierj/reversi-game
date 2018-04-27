@@ -41,9 +41,14 @@ namespace ReversiGame
         {
             Tile placement = Board.Place(x, y, IsPlayer1 ? TileColor.BLACK : TileColor.WHITE);
             if (placement != null){
-                IsPlayer1 = !IsPlayer1;
+                NextTurn();
             }
             return placement;
+        }
+
+        public void NextTurn()
+        {
+            IsPlayer1 = !IsPlayer1;
         }
 
         //play a play at a given position
@@ -58,7 +63,7 @@ namespace ReversiGame
             // Handle case where next player has no moves
             if(PossiblePlays().Count == 0)
             {
-                IsPlayer1 = !IsPlayer1;
+                NextTurn();
             }
         }
 

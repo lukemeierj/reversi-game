@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.StopOrClear = new System.Windows.Forms.Button();
+            this.NextMoveBtn = new System.Windows.Forms.Button();
             this.OptionsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,6 +105,7 @@
             // 
             // OptionsPanel
             // 
+            this.OptionsPanel.Controls.Add(this.NextMoveBtn);
             this.OptionsPanel.Controls.Add(this.label3);
             this.OptionsPanel.Controls.Add(this.label2);
             this.OptionsPanel.Controls.Add(this.StopOrClear);
@@ -146,6 +148,16 @@
             this.StopOrClear.Text = "Stop / Clear";
             this.StopOrClear.UseVisualStyleBackColor = true;
             // 
+            // NextMoveBtn
+            // 
+            this.NextMoveBtn.Location = new System.Drawing.Point(39, 377);
+            this.NextMoveBtn.Name = "NextMoveBtn";
+            this.NextMoveBtn.Size = new System.Drawing.Size(141, 27);
+            this.NextMoveBtn.TabIndex = 8;
+            this.NextMoveBtn.Text = "Next";
+            this.NextMoveBtn.UseVisualStyleBackColor = true;
+            this.NextMoveBtn.Click += new System.EventHandler(this.NextMove);
+            // 
             // BoardVisual
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -173,6 +185,7 @@
         private System.Windows.Forms.Button StopOrClear;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button NextMoveBtn;
     }
 }
 

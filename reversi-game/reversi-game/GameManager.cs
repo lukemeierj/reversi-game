@@ -18,9 +18,30 @@ namespace ReversiGame
             Agents[1] = new ReversiSolver(TileColor.WHITE, heuristic2, ply2);
         }
 
-        public GameManager(Func<Game, int> heuristic, int ply, TileColor color)
+        public GameManager(Func<Game, int> heuristic, int ply, TileColor color, uint size = 8)
         {
+            game = new Game(size);
             Agents[0] = new ReversiSolver(color, heuristic, ply);
+        }
+
+        public GameManager(uint size = 8)
+        {
+            game = new Game(size);
+        }
+
+        public void PlayAs(Play p, TileColor color)
+        {
+
+        }
+
+        public void UpdateGame(Game game)
+        {
+            game = new Game(game);
+        }
+
+        public Game GetGame()
+        {
+            return new Game(game);
         }
 
         public IEnumerator<Game> Play()

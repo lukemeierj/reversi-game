@@ -24,7 +24,8 @@ namespace ReversiUI
             CvC
         }
 
-        private Game game;
+        GameManager manager;
+        Game game;
         private GameMode mode = GameMode.PvP;
         private DataGridView gameBoard;
         private const int BOARD_SIZE = 8;
@@ -46,7 +47,8 @@ namespace ReversiUI
             hint = (Bitmap)Image.FromFile("./hint.bmp");
 
 
-            game = new Game(BOARD_SIZE);
+            manager = new GameManager();
+            game = manager.GetGame();
 
             InitializeComponent();
 
@@ -157,24 +159,7 @@ namespace ReversiUI
             //if there exists a valid play at this coordinate, get object
             playable.TryGetValue(destCoords, out Play p);
 
-            //if there was nothing, do nothing
-            if(p != null)
-            {
-                //use the play
-                game.UsePlay(p);
-
-                if (game.GameOver())
-                {
-                    RenderGameOver();
-                }
-                else
-                {
-                    playable = game.PossiblePlays();
-                }
-
-                //rerender
-                UpdateBoard();
-            }            
+                    
 
         }
 
@@ -227,6 +212,36 @@ namespace ReversiUI
                     mode = GameMode.CvC;
                     break;
             }
+        }
+
+        private Game PlayAndRender(Play p)
+        {
+            //if there was nothing, do nothing
+            if (p != null)
+            {
+                //use the play
+                game.UsePlay(p);
+
+                if (game.GameOver())
+                {
+                    RenderGameOver();
+                }
+                else
+                {
+                    playable = game.PossiblePlays();
+                }
+
+                //rerender
+                UpdateBoard();
+            }
+
+            return game;
+        }
+
+        private void NextMove(object sender, EventArgs e)
+        {
+            manager.Play().MoveNext();
+
         }
     }
 }

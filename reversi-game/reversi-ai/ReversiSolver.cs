@@ -104,37 +104,17 @@ namespace ReversiAI
         /// <returns></returns>
         public static int BasicHeuristic(Game game, TileColor color)
         {
-            int black = 0;
-            int white = 0;
-            for(int i = 0; i < game.Board.Size; i++)
-            {
-                for (int j = 0; j < game.Board.Size; j++)
-                {
-                    switch (game.ColorAt(i, j))
-                    {
-                        case TileColor.BLACK:
-                            black++;
-                            break;
-                        case TileColor.WHITE:
-                            white++;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
+            int black = game.Board.GetNumColor(TileColor.BLACK);
+            int white = game.Board.GetNumColor(TileColor.WHITE);
 
-            if (game.GameOver())
+            // Ensures winning states are always weighted higher than intermediate states
+            if (game.Winner == color)
             {
-                if(color == TileColor.BLACK && black > white
-                    || color == TileColor.WHITE && white > black)
-                {
-                    return 100;
-                }
-                else
-                {
-                    return 0;
-                }
+                return (int)game.Board.Size * (int)game.Board.Size;
+            }
+            else if (game.Winner != null)
+            {
+                return -(int)game.Board.Size * (int)game.Board.Size;
             }
 
             if (color == TileColor.BLACK)
@@ -147,6 +127,36 @@ namespace ReversiAI
             }
             else
                 return 0;
+        }
+        
+        /// <summary>
+        /// Calculates the number of moves the opponent
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static int ActualMobilityHeuristic(Game game, TileColor color)
+        {
+            TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+
+            // Ensures winning states are always weighted higher than intermediate states
+            if (game.Winner == color)
+            {
+                return (int)game.Board.Size * (int)game.Board.Size;
+            } else if(game.Winner != null)
+            {
+                return - (int)game.Board.Size * (int)game.Board.Size;
+            }
+
+            // Returns the number of plays the opponent can make subtracted from the size * 2
+            if(color == currentPlayer)
+            {
+                return ((int) game.Board.Size * 2) - game.PossiblePlays(true).Count;
+            } else
+            {
+                return ((int)game.Board.Size * 2) - game.PossiblePlays().Count;
+            }
+            
         }
     }
 }

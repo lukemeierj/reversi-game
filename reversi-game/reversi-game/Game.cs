@@ -22,6 +22,27 @@ namespace ReversiGame
         //when true, the active player is player1.
         public bool IsPlayer1 { private set; get; }
         public Board Board { private set; get; }
+        public TileColor? Winner
+        {
+            get {
+                if (GameOver())
+                {
+                    if(Board.GetNumColor(TileColor.BLACK) > Board.GetNumColor(TileColor.WHITE))
+                    {
+                        return TileColor.BLACK;
+                    } else if (Board.GetNumColor(TileColor.WHITE) > Board.GetNumColor(TileColor.BLACK))
+                    {
+                        return TileColor.WHITE;
+                    } else
+                    {
+                        return null;
+                    }
+                } else
+                {
+                    return null;
+                }
+            }
+        }
 
         public Game(uint size)
         {
@@ -97,13 +118,19 @@ namespace ReversiGame
 
         //find all possible plays given the current game state 
         // this takes into consideration whose turn it is
-        public Dictionary<Tuple<int, int>, Play> PossiblePlays()
+        public Dictionary<Tuple<int, int>, Play> PossiblePlays(bool otherPlayer = false)
         {
             //for all open spots on the board that are adjacent to any tiles
             List<Tuple<int, int>> possiblePositions = Board.OpenAdjacentSpots();
             Dictionary<Tuple<int, int>, Play> results = new Dictionary<Tuple<int, int>, Play>();
 
             TileColor playerColor = IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+
+            // If calcualting potential moves for the other player switch the color
+            if (otherPlayer)
+            {
+                playerColor = IsPlayer1 ? TileColor.WHITE : TileColor.BLACK; ;
+            }
 
             foreach (Tuple<int,int> coord in possiblePositions)
             {

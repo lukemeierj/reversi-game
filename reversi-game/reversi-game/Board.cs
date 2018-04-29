@@ -127,6 +127,27 @@ namespace ReversiGame
             return false;
         }
 
+        /// <summary>
+        /// Returns the number of tiles with the given color
+        /// </summary>
+        /// <param name="color">The tile color to count</param>
+        /// <returns>The sum of the tiles with the given color</returns>
+        public int GetNumColor(TileColor color)
+        {
+            int count = 0;
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    if(board[i,j].color == color)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
         private Tile[,] board;
         public uint Size { get; private set; }
     }

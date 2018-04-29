@@ -13,7 +13,7 @@ namespace ReversiData
         static void Main(string[] args)
         {
 
-            var results = TestHeuristic(ReversiSolver.BasicHeuristic, ReversiSolver.BasicHeuristic, 2);
+            var results = TestHeuristic(ReversiSolver.BasicHeuristic, ReversiSolver.ActualMobilityHeuristic, 10, 5, 5, 6);
             Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2);
             Console.ReadLine();
         }
@@ -34,12 +34,13 @@ namespace ReversiData
                 if (game.Winner == TileColor.BLACK)
                 {
                     blackWins++;
+                    Console.WriteLine(i + "\tBlack wins");
                 }
                 else if (game.Winner == TileColor.WHITE)
                 {
                     whiteWins++;
+                    Console.WriteLine(i + "\tWhite wins");
                 }
-                Console.WriteLine("On the " + i + "th game.");
             }
             return Tuple.Create(blackWins, whiteWins);
         }

@@ -44,8 +44,12 @@ namespace ReversiAI
         /// <returns></returns>
         private Tuple<int,Play> AlphaBeta(Game game, int ply = 5, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue)
         {
+            //don't evaluate possible plays if you are at the base of the search tree
+            Dictionary<Tuple<int,int>, Play> possiblePlays = ply == 0 ? null : game.PossiblePlays();
+
             // If exit case
-            if(ply == 0 || game.GameOver())
+            // score not effected by being pushed into a position with no possible moves
+            if(ply == 0 || game.GameOver() || possiblePlays.Count == 0)
             {
                 return new Tuple<int,Play>(heuristic(game),null);
             }

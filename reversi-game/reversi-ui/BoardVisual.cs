@@ -227,7 +227,7 @@ namespace ReversiUI
                 case "CvC":
                     if (mode == GameMode.CvC) break;
                     mode = GameMode.CvC;
-                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, ReversiSolver.BasicHeuristic, 5);
+                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, ReversiSolver.ActualMobilityHeuristic, 5);
                     break;
             }
             game = manager.GetGame();
@@ -239,6 +239,7 @@ namespace ReversiUI
 
         private void NextMove(object sender, EventArgs e)
         {
+            if (game.Winner != null) return;
             Game next = manager.Next();
             if (next != null) game = next;
             playable = game.PossiblePlays();

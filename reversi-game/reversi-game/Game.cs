@@ -27,12 +27,17 @@ namespace ReversiGame
                     {
                         return null;
                     }
-                } else
+                } else if (deadlock)
+                {
+                    return TileColor.BLANK;
+                }
+                else
                 {
                     return null;
                 }
             }
         }
+        private bool deadlock = false;
 
         public Game(uint size)
         {
@@ -79,12 +84,14 @@ namespace ReversiGame
             {
                 Board[tile.Coords.Item1, tile.Coords.Item2].Flip();
             }
-
+            int i = 0;
             // Handle case where next player has no moves
-            if(PossiblePlays().Count == 0)
+            while(i <= 2 && PossiblePlays().Count == 0)
             {
+                i++;
                 NextTurn();
             }
+            if (i >= 2) deadlock = true;
         }
 
         /// <summary>

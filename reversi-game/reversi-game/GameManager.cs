@@ -9,10 +9,9 @@ namespace ReversiGame
     {
         private Game game;
         public ReversiSolver[] Agents = new ReversiSolver[2];
-        private int turnNum = 0;
         private Play[] humanPlay = new Play[2];
 
-        public GameManager(Func<Game, int> heuristic1, int ply1, Func<Game, int> heuristic2, int ply2, uint size = 8)
+        public GameManager(Func<Game, TileColor, int> heuristic1, int ply1, Func<Game, TileColor, int> heuristic2, int ply2, uint size = 8)
         {
             //8x8 board
             game = new Game(size);
@@ -20,10 +19,11 @@ namespace ReversiGame
             Agents[1] = new ReversiSolver(TileColor.WHITE, heuristic2, ply2);
         }
 
-        public GameManager(Func<Game, int> heuristic, int ply, TileColor color, uint size = 8)
+        public GameManager(Func<Game, TileColor, int> heuristic, int ply, TileColor color, uint size = 8)
         {
             game = new Game(size);
-            Agents[0] = new ReversiSolver(color, heuristic, ply);
+            int index = game.IsPlayer1 ? 0 : 1;
+            Agents[index] = new ReversiSolver(color, heuristic, ply);
         }
 
         public GameManager(uint size = 8)
@@ -31,26 +31,29 @@ namespace ReversiGame
             game = new Game(size);
         }
 
-        public void PlayAs(Play p, TileColor color)
+        public Play HumanPlay(Play p)
         {
-
-            int index = color == TileColor.BLACK ? 0 : 1;
+            if (p == null) return null;
+            int index = p.Color == TileColor.BLACK ? 0 : 1;
             ReversiSolver agent = Agents[index];
 
+            //if you try to play on behalf of an AI
             if(agent != null)
             {
-                throw new ArgumentException();
+                Console.WriteLine("Tried to play as AI");
+                return null;
             }
 
             //if the player is the right color 
             //unsafe, since the human player could play on the AI's behalf
-            if (game.IsPlayer1 && color != TileColor.BLACK
-                || !game.IsPlayer1 && color != TileColor.WHITE)
+            if (game.IsPlayer1 && p.Color != TileColor.BLACK
+                || !game.IsPlayer1 && p.Color != TileColor.WHITE)
             {
                 throw new ArgumentException("Not your turn!");
             }
 
             humanPlay[index] = p;
+            return p;
         }
 
         public Game GetGame()
@@ -69,7 +72,9 @@ namespace ReversiGame
             {
                 if (humanPlay[index] == null) return null;
                 game.UsePlay(humanPlay[index]);
-                humanPlay[index] = null;
+                //new play should remove all other queued plays
+                humanPlay[0] = null;
+                humanPlay[1] = null;
             }
             else
             {
@@ -86,30 +91,6 @@ namespace ReversiGame
             }
             return GetGame();
         }
-
-        public IEnumerator<Game> Play()
-        {
-            int i = 0;
-            //not good end state, but avoid infinite loops for now
-            while (i <= 70)
-            {
-                // Play the AI move
-                Play q = Agents[i % 2].ChoosePlay(game);
-
-                if (q != null)
-                {
-                    Console.WriteLine((q.Coords.Item1 + 1) + " " + (q.Coords.Item2 + 1));
-                    game.UsePlay(q);
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-                yield return game;
-            }
-
-        }
-
 
     }
 }

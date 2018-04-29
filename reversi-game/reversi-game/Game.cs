@@ -115,6 +115,11 @@ namespace ReversiGame
             return Board.BoardFull();
         }
 
+        public uint Size()
+        {
+            return Board.Size;
+        }
+
 
     }
 }

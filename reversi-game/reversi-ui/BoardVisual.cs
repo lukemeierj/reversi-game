@@ -47,7 +47,7 @@ namespace ReversiUI
             hint = (Bitmap)Image.FromFile("./hint.bmp");
 
 
-            manager = new GameManager();
+            manager = new GameManager(BOARD_SIZE);
             game = manager.GetGame();
 
             InitializeComponent();
@@ -129,12 +129,12 @@ namespace ReversiUI
                 gameBoard.Columns.Add(imageColumn);
                 columnCount = columnCount + 1;
             }
-            while (columnCount < BOARD_SIZE);
+            while (columnCount < game.Size());
         }
 
         private void CreateRows()
         {
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < game.Size(); i++)
             {
                 gameBoard.Rows.Add();
             }
@@ -158,17 +158,27 @@ namespace ReversiUI
 
             //if there exists a valid play at this coordinate, get object
             playable.TryGetValue(destCoords, out Play p);
-
-                    
-
+            Play humanPlay = manager.HumanPlay(p);
+            if (humanPlay == null) return;
+            Game next = manager.Next();
+            if(next != null)
+            {
+                game = next;
+            }
+            else
+            {
+                throw new ArgumentException("No human player/other game manager error");
+            }
+            playable = game.PossiblePlays();
+            UpdateBoard();
         }
 
         //set gameboard view to represent the game's board state
         private void UpdateBoard()
         {
-            for(int x = 0; x < BOARD_SIZE; x++)
+            for (int x = 0; x < game.Size(); x++)
             {
-                for(int y = 0; y < BOARD_SIZE; y++)
+                for(int y = 0; y < game.Size(); y++)
                 {
                     DataGridViewImageCell cell = (DataGridViewImageCell)gameBoard.Rows[y].Cells[x];
                     switch (game.ColorAt(x, y))
@@ -200,47 +210,39 @@ namespace ReversiUI
             switch (c.Tag)
             {
                 case "PvP":
+                    if (mode == GameMode.PvP) break;
                     mode = GameMode.PvP;
+                    manager = new GameManager();
                     break;
                 case "PvC":
+                    if (mode == GameMode.PvC) break;
                     mode = GameMode.PvC;
+                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, TileColor.WHITE);
                     break;
                 case "CvP":
+                    if (mode == GameMode.CvP) break;
                     mode = GameMode.CvP;
+                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, TileColor.BLACK);
                     break;
                 case "CvC":
+                    if (mode == GameMode.CvC) break;
                     mode = GameMode.CvC;
+                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, ReversiSolver.BasicHeuristic, 5);
                     break;
             }
+            game = manager.GetGame();
+            playable = game.PossiblePlays();
+            UpdateBoard();
         }
 
-        private Game PlayAndRender(Play p)
-        {
-            //if there was nothing, do nothing
-            if (p != null)
-            {
-                //use the play
-                game.UsePlay(p);
 
-                if (game.GameOver())
-                {
-                    RenderGameOver();
-                }
-                else
-                {
-                    playable = game.PossiblePlays();
-                }
-
-                //rerender
-                UpdateBoard();
-            }
-
-            return game;
-        }
 
         private void NextMove(object sender, EventArgs e)
         {
-            manager.Play().MoveNext();
+            Game next = manager.Next();
+            if (next != null) game = next;
+            playable = game.PossiblePlays();
+            UpdateBoard();
 
         }
     }

@@ -13,10 +13,10 @@ namespace ReversiAI
         public int MaxPly { private set; get; }
         public TileColor Color { private set; get; }
 
-        public ReversiSolver(TileColor color, Func<Game, int> heuristic, int ply)
+        public ReversiSolver(TileColor color, Func<Game, TileColor, int> heuristic, int ply)
         {
             Color = color;
-            this.heuristic = heuristic;
+            SetHeuristic(heuristic);
             MaxPly = ply;
         }
 

@@ -139,7 +139,7 @@ namespace ReversiGame
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    if(board[i,j].color == color)
+                    if(board[i,j] != null && board[i,j].color == color)
                     {
                         count++;
                     }

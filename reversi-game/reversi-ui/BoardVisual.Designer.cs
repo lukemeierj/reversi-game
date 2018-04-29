@@ -36,10 +36,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.GamePanel = new System.Windows.Forms.Panel();
             this.OptionsPanel = new System.Windows.Forms.Panel();
+            this.NextMoveBtn = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.StopOrClear = new System.Windows.Forms.Button();
-            this.NextMoveBtn = new System.Windows.Forms.Button();
             this.OptionsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,6 +119,16 @@
             this.OptionsPanel.Size = new System.Drawing.Size(218, 563);
             this.OptionsPanel.TabIndex = 6;
             // 
+            // NextMoveBtn
+            // 
+            this.NextMoveBtn.Location = new System.Drawing.Point(39, 377);
+            this.NextMoveBtn.Name = "NextMoveBtn";
+            this.NextMoveBtn.Size = new System.Drawing.Size(141, 27);
+            this.NextMoveBtn.TabIndex = 8;
+            this.NextMoveBtn.Text = "Next";
+            this.NextMoveBtn.UseVisualStyleBackColor = true;
+            this.NextMoveBtn.Click += new System.EventHandler(this.NextMove);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -147,16 +157,7 @@
             this.StopOrClear.TabIndex = 5;
             this.StopOrClear.Text = "Stop / Clear";
             this.StopOrClear.UseVisualStyleBackColor = true;
-            // 
-            // NextMoveBtn
-            // 
-            this.NextMoveBtn.Location = new System.Drawing.Point(39, 377);
-            this.NextMoveBtn.Name = "NextMoveBtn";
-            this.NextMoveBtn.Size = new System.Drawing.Size(141, 27);
-            this.NextMoveBtn.TabIndex = 8;
-            this.NextMoveBtn.Text = "Next";
-            this.NextMoveBtn.UseVisualStyleBackColor = true;
-            this.NextMoveBtn.Click += new System.EventHandler(this.NextMove);
+            this.StopOrClear.Click += new System.EventHandler(this.Reset);
             // 
             // BoardVisual
             // 

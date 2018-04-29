@@ -245,5 +245,12 @@ namespace ReversiUI
             UpdateBoard();
 
         }
+
+        private void Reset(object sender, EventArgs e)
+        {
+            manager.Reset();
+            game = manager.GetGame();
+            UpdateBoard();
+        }
     }
 }

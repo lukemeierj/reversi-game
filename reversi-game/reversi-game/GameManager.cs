@@ -38,7 +38,7 @@ namespace ReversiGame
             ReversiSolver agent = Agents[index];
 
             //if you try to play on behalf of an AI
-            if(agent != null)
+            if (agent != null)
             {
                 Console.WriteLine("Tried to play as AI");
                 return null;
@@ -90,6 +90,11 @@ namespace ReversiGame
                 }
             }
             return GetGame();
+        }
+
+        public void Reset()
+        {
+            game = new Game(game.Size());
         }
 
     }

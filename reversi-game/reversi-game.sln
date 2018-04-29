@@ -9,9 +9,13 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-game", "reversi-gam
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-ai", "reversi-ai\reversi-ai.shproj", "{7D1E7BE4-641B-413C-AF44-B4BBB46B0FDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversiData", "ReversiData\ReversiData.csproj", "{5312C45C-7863-47D9-A607-88D591BDC25E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		reversi-game\reversi-game.projitems*{0c8da75e-b1ad-4733-b8ef-498ebf60074b}*SharedItemsImports = 13
+		reversi-ai\reversi-ai.projitems*{5312c45c-7863-47d9-a607-88d591bdc25e}*SharedItemsImports = 4
+		reversi-game\reversi-game.projitems*{5312c45c-7863-47d9-a607-88d591bdc25e}*SharedItemsImports = 4
 		reversi-ai\reversi-ai.projitems*{7d1e7be4-641b-413c-af44-b4bbb46b0fdd}*SharedItemsImports = 13
 		reversi-ai\reversi-ai.projitems*{e8646764-136d-47b9-b4f9-6f1f7f1a1f8a}*SharedItemsImports = 4
 		reversi-game\reversi-game.projitems*{e8646764-136d-47b9-b4f9-6f1f7f1a1f8a}*SharedItemsImports = 4
@@ -25,6 +29,10 @@ Global
 		{E8646764-136D-47B9-B4F9-6F1F7F1A1F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8646764-136D-47B9-B4F9-6F1F7F1A1F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8646764-136D-47B9-B4F9-6F1F7F1A1F8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5312C45C-7863-47D9-A607-88D591BDC25E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5312C45C-7863-47D9-A607-88D591BDC25E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5312C45C-7863-47D9-A607-88D591BDC25E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5312C45C-7863-47D9-A607-88D591BDC25E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

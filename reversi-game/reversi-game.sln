@@ -9,7 +9,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-game", "reversi-gam
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "reversi-ai", "reversi-ai\reversi-ai.shproj", "{7D1E7BE4-641B-413C-AF44-B4BBB46B0FDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reversi-data", "ReversiData\reversi-data.csproj", "{5312C45C-7863-47D9-A607-88D591BDC25E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reversi-data", "reversi-data\reversi-data.csproj", "{5312C45C-7863-47D9-A607-88D591BDC25E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

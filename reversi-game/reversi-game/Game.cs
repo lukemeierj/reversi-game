@@ -12,6 +12,7 @@ namespace ReversiGame
         //when true, the active player is player1.
         public bool IsPlayer1 { private set; get; }
         public Board Board { private set; get; }
+        private bool deadlock = false;
         public TileColor? Winner
         {
             get {
@@ -37,7 +38,6 @@ namespace ReversiGame
                 }
             }
         }
-        private bool deadlock = false;
 
         public Game(uint size)
         {

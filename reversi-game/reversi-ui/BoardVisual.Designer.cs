@@ -71,7 +71,7 @@
             this.PlayerVsCompBlack.Name = "PlayerVsCompBlack";
             this.PlayerVsCompBlack.Size = new System.Drawing.Size(58, 26);
             this.PlayerVsCompBlack.TabIndex = 2;
-            this.PlayerVsCompBlack.Tag = "PvC";
+            this.PlayerVsCompBlack.Tag = "CvP";
             this.PlayerVsCompBlack.Text = "Black";
             this.PlayerVsCompBlack.UseVisualStyleBackColor = true;
             this.PlayerVsCompBlack.Click += new System.EventHandler(this.ChangeGameMode);
@@ -82,7 +82,7 @@
             this.PlayerVsCompW.Name = "PlayerVsCompW";
             this.PlayerVsCompW.Size = new System.Drawing.Size(58, 26);
             this.PlayerVsCompW.TabIndex = 3;
-            this.PlayerVsCompW.Tag = "CvP";
+            this.PlayerVsCompW.Tag = "PvC";
             this.PlayerVsCompW.Text = "White";
             this.PlayerVsCompW.UseVisualStyleBackColor = true;
             this.PlayerVsCompW.Click += new System.EventHandler(this.ChangeGameMode);

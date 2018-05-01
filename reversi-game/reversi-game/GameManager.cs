@@ -11,26 +11,32 @@ namespace ReversiGame
         public ReversiSolver[] Agents = new ReversiSolver[2];
         private Play[] humanPlay = new Play[2];
 
+
+        //construct manager for computer vs computer play
         public GameManager(Func<Game, TileColor, int> heuristic1, int ply1, Func<Game, TileColor, int> heuristic2, int ply2, uint size = 8)
         {
-            //8x8 board
             game = new Game(size);
             Agents[0] = new ReversiSolver(TileColor.BLACK, heuristic1, ply1);
             Agents[1] = new ReversiSolver(TileColor.WHITE, heuristic2, ply2);
         }
 
+        //construct manager for human vs computer play
         public GameManager(Func<Game, TileColor, int> heuristic, int ply, TileColor color, uint size = 8)
         {
             game = new Game(size);
-            int index = game.IsPlayer1 ? 0 : 1;
+            int index = color == TileColor.BLACK ? 0 : 1;
             Agents[index] = new ReversiSolver(color, heuristic, ply);
         }
 
+        //create game manager for human vs human play
         public GameManager(uint size = 8)
         {
             game = new Game(size);
         }
 
+
+        //play on behalf of a human
+        //play must be valid given the current state of the board 
         public Play HumanPlay(Play p)
         {
             if (p == null) return null;

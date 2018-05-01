@@ -25,12 +25,12 @@ namespace ReversiAI
         /// Takes a game object and returns the best move given the heuristic for the current player
         /// </summary>
         /// <param name="game">The game in the state that needs to be searched from</param>
-        /// <param name="ply">The depth the agent will search and calculate heuristics</param>
-        /// <returns></returns>
-        public Play ChoosePlay(Game game)
+        /// <param name="prune">Whether or not to use the alpha beta pruning</param>
+        /// <returns>The best play the AI can find at its ply</returns>
+        public Play ChoosePlay(Game game, bool prune = true)
         {
             game = new Game(game);
-            return AlphaBeta(game, MaxPly).Item2;
+            return AlphaBeta(game, MaxPly, prune).Item2;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace ReversiAI
         /// <param name="beta">Lowest value seen so far</param>
         /// <param name="ply">The depth to search the game</param>
         /// <returns></returns>
-        private Tuple<int,Play> AlphaBeta(Game game, int ply = 5, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue)
+        private Tuple<int,Play> AlphaBeta(Game game, int ply = 5, bool prune = true, bool max = true, int alpha = int.MinValue, int beta = int.MaxValue)
         {
             //don't evaluate possible plays if you are at the base of the search tree
             Dictionary<Tuple<int,int>, Play> possiblePlays = ply == 0 ? null : game.PossiblePlays();
@@ -70,7 +70,7 @@ namespace ReversiAI
             foreach (KeyValuePair<Tuple<int,int>,Play> pair in game.PossiblePlays())
             {
                 // Takes the max between the branch and the current minimum value
-                int childScore = AlphaBeta(game.ForkGame(pair.Value), ply - 1, !max, alpha, beta).Item1;
+                int childScore = AlphaBeta(game.ForkGame(pair.Value), ply - 1, prune, !max, alpha, beta).Item1;
 
                 // If the new value is better, save it and the move that yields it
                 if (bestScore != Optimizer(bestScore, childScore))
@@ -84,7 +84,7 @@ namespace ReversiAI
                 else
                     beta = Optimizer(beta, bestScore);
 
-                if (beta <= alpha)
+                if (prune && (beta <= alpha))
                     break;
             }
             return new Tuple<int, Play>(bestScore, bestPlay);

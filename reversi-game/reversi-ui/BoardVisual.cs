@@ -158,7 +158,7 @@ namespace ReversiUI
 
             //if there exists a valid play at this coordinate, get object
             playable.TryGetValue(destCoords, out Play p);
-            Play humanPlay = manager.HumanPlay(p);
+            Play humanPlay = manager.OutsidePlay(p);
             if (humanPlay == null) return;
             Game next = manager.Next();
             if(next != null)

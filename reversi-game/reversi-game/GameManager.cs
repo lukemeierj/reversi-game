@@ -34,10 +34,10 @@ namespace ReversiGame
             game = new Game(size);
         }
 
-
+        
         //play on behalf of a human
         //play must be valid given the current state of the board 
-        public Play HumanPlay(Play p)
+        public Play OutsidePlay(Play p)
         {
             if (p == null) return null;
             int index = p.Color == TileColor.BLACK ? 0 : 1;
@@ -49,6 +49,7 @@ namespace ReversiGame
                 Console.WriteLine("Tried to play as AI");
                 return null;
             }
+
 
             //if the player is the right color 
             //unsafe, since the human player could play on the AI's behalf

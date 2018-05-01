@@ -106,7 +106,7 @@ namespace ReversiAI
         /// </summary>
         /// <param name="game">Game in the state the move needs to be calculated in</param>
         /// <returns></returns>
-        public static int BasicHeuristic(Game game, TileColor color)
+        public static int TileCountHeuristic(Game game, TileColor color)
         {
             int black = game.Board.GetNumColor(TileColor.BLACK);
             int white = game.Board.GetNumColor(TileColor.WHITE);

@@ -15,7 +15,7 @@ namespace ReversiData
             int ply = 5;
             uint size = 8;
 
-            var results = TestHeuristic(ReversiSolver.BasicHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            var results = TestHeuristic(ReversiSolver.TileCountHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
             Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size);
             Console.ReadLine();
         }

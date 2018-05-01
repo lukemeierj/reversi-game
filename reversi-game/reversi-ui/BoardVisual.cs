@@ -216,17 +216,17 @@ namespace ReversiUI
                 case "PvC":
                     if (mode == GameMode.PvC) break;
                     mode = GameMode.PvC;
-                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, TileColor.WHITE);
+                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, TileColor.WHITE);
                     break;
                 case "CvP":
                     if (mode == GameMode.CvP) break;
                     mode = GameMode.CvP;
-                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, TileColor.BLACK);
+                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, TileColor.BLACK);
                     break;
                 case "CvC":
                     if (mode == GameMode.CvC) break;
                     mode = GameMode.CvC;
-                    manager = new GameManager(ReversiSolver.BasicHeuristic, 5, ReversiSolver.ActualMobilityHeuristic, 5);
+                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, ReversiSolver.ActualMobilityHeuristic, 5);
                     break;
             }
             game = manager.GetGame();

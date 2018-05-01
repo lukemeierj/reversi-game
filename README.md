@@ -1,3 +1,4 @@
+
 # Reversi (Othello) AI
 #### By Luke Meier and Drew Hayward
 
@@ -51,8 +52,29 @@ Plays contain
 * `Tuple<int, int> game.Coords` 
 * `List<Tile> game.AffectedTiles`
 * Create a `new Play(color, coordinates, tilesAffected)` or `new Play(color, coords)` and let the class calculate the affected tiles.  
-## TODO: Document 
-* Board class,
-* Tile class
-* Data project
-* AI project 
+#### Board
+Manages the game's board as a `n x n` matrix of `Tile`s.
+* Access `Tile` objects with board[x,y].
+* Use `game.BoardFull()` to check if all the spots on a board are occupied.
+* Use `game.Place(x,y)` to place a tile on the board.
+* Use `new Board(size)` to create a new game board.
+* Use `new Board(oldBoard)` to create a deep copy of a board.
+#### Tile
+`Tile` objects store their `Coords` and their `Color`
+* Create with `new Tile(color)`
+* Set coordinates with `tile.Place(x,y)`
+	* This will return a `InvalidOperationException` if the tile was already placed.
+* In order to change the color of a tile, call `tile.Flip()`
+### Reversi AI
+* **Heuristics**:  All heuristics take a `Game` object and a `TileColor` to optimize for.  
+	* `TileCountHeuristic` - a literal count of how many more tiles one player has than the other
+	* `ActualMobilityHeuristic` - the number of impossible plays for the opponent.  That is, the fewer options the opponent has, the higher the heuristic.  
+* To create an agent, `new ReversiSolver(color, heuristic, ply)`
+* To get a play from the AI, call `var p = solver.ChoosePlay(game, [prune = true])`
+	* This goes to the depth of `Ply`, as set in the constructor.  It only uses alpha beta pruning of prune is set to `true`
+	* `game.SetHeuristic(heuristic)` sets the solver's heuristic to always optimize on behalf of it's own color.  That is, if the solver is *black*, the heuristic will score on behalf of *black*.
+	* 
+
+### Reversi Data
+This is driver code for testing.  It allows you to set most important things to compare and log the results.  
+* `TestHeuristic(heuristic1, heuristic2, ply1, ply2, boardsize)` returns a tuple with the number of *black* and *white* tiles at the end of game play.   

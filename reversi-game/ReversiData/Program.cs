@@ -12,37 +12,29 @@ namespace ReversiData
     {
         static void Main(string[] args)
         {
+            int ply = 5;
+            uint size = 8;
 
-            var results = TestHeuristic(ReversiSolver.BasicHeuristic, ReversiSolver.ActualMobilityHeuristic, 10, 5, 5, 6);
-            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2);
+            var results = TestHeuristic(ReversiSolver.BasicHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size);
             Console.ReadLine();
         }
 
-        static Tuple<int,int> TestHeuristic(Func<Game, TileColor, int> h1, Func<Game, TileColor, int> h2, int trials, int ply1 = 5, int ply2 = 5, uint size = 8)
+        static Tuple<int,int> TestHeuristic(Func<Game, TileColor, int> h1, Func<Game, TileColor, int> h2, int ply1 = 5, int ply2 = 5, uint size = 8)
         {
-            int blackWins = 0;
-            int whiteWins = 0;
+            int black = 0;
+            int white = 0;
             GameManager manager = new GameManager(h1, ply1, h2, ply2, size);
-            for(int i = 0; i < trials; i++)
+            manager.Reset();
+            Game game = manager.GetGame();
+            while(game.Winner == null)
             {
-                manager.Reset();
-                Game game = manager.GetGame();
-                while(game.Winner == null)
-                {
-                    game = manager.Next();
-                }
-                if (game.Winner == TileColor.BLACK)
-                {
-                    blackWins++;
-                    Console.WriteLine(i + "\tBlack wins");
-                }
-                else if (game.Winner == TileColor.WHITE)
-                {
-                    whiteWins++;
-                    Console.WriteLine(i + "\tWhite wins");
-                }
+                game = manager.Next();
             }
-            return Tuple.Create(blackWins, whiteWins);
+
+            black = game.Board.GetNumColor(TileColor.BLACK);
+            white = game.Board.GetNumColor(TileColor.WHITE);
+            return Tuple.Create(black, white);
         }
     }
 }

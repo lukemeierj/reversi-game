@@ -251,6 +251,7 @@ namespace ReversiUI
         {
             manager.Reset();
             game = manager.GetGame();
+            playable = game.PossiblePlays();
             UpdateBoard();
         }
     }

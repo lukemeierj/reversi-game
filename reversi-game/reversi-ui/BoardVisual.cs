@@ -34,7 +34,6 @@ namespace ReversiUI
         private Bitmap white;
         private Bitmap hint;
         private int bitmapPadding = 6;
-        private ReversiSolver s;
 
         Dictionary<Tuple<int, int>, Play> playable;
 

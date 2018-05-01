@@ -62,7 +62,7 @@ namespace ReversiGame
 
         //place a tile at a position
         // the color of the tile is determined by whose turn it is
-        public Tile Place(int x, int y)
+        private Tile Place(int x, int y)
         {
             Tile placement = Board.Place(x, y, IsPlayer1 ? TileColor.BLACK : TileColor.WHITE);
             if (placement != null){
@@ -71,7 +71,7 @@ namespace ReversiGame
             return placement;
         }
 
-        public void NextTurn()
+        private void NextTurn()
         {
             IsPlayer1 = !IsPlayer1;
         }
@@ -146,7 +146,7 @@ namespace ReversiGame
         //right now, our only game over condition is a full board.
         public bool GameOver()
         {
-            return Board.BoardFull();
+            return deadlock || Board.BoardFull();
         }
 
         public uint Size()

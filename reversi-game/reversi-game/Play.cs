@@ -16,12 +16,6 @@ namespace ReversiGame
             this.AffectedTiles = affected;            
         }
 
-        public Play(TileColor color, Tuple<int, int> coords)
-        {
-            this.Color = color;
-            this.Coords = coords;
-        }
-
         public Play(Board board, TileColor color, Tuple<int, int> coords)
         {
             //store given information
@@ -87,7 +81,7 @@ namespace ReversiGame
             }
         }
 
-        public void AddAffected(List<Tile> affected)
+        private void AddAffected(List<Tile> affected)
         {
             if (AffectedTiles == null)
             {
@@ -96,7 +90,7 @@ namespace ReversiGame
             AffectedTiles.AddRange(affected);
         }
 
-        public void AddAffected(Tile affectedTile)
+        private void AddAffected(Tile affectedTile)
         {
             if (AffectedTiles == null)
             {

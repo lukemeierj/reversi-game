@@ -29,7 +29,7 @@ namespace ReversiGame
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static Board DeepClone(Board obj)
+        private static Board DeepClone(Board obj)
         {
             using (var ms = new MemoryStream())
             {

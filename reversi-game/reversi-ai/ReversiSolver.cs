@@ -162,5 +162,134 @@ namespace ReversiAI
             }
             
         }
+
+        /// <summary>
+        /// Calculates the number of corners held by the player.
+        /// +1 for player
+        /// -1 for opponent
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static int CornersHeuristic(Game game, TileColor color)
+        {
+            TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+
+            List<Tuple<int, int>> corners = new List<Tuple<int, int>>();
+            corners.Add(Tuple.Create(0, 0));
+            corners.Add(Tuple.Create((int) game.Board.Size - 1, 0));
+            corners.Add(Tuple.Create(0, (int) game.Board.Size - 1));
+            corners.Add(Tuple.Create((int) game.Board.Size - 1, (int) game.Board.Size - 1));
+
+            // Ensures winning states are always weighted higher than intermediate states
+            if (game.Winner == color)
+            {
+                return 5;
+            }
+            else if (game.Winner != null)
+            {
+                return - 5;
+            }
+
+            int score = 0;
+            foreach(Tuple<int,int> corner in corners)
+            {
+                if (game.Board[corner.Item1, corner.Item2] != null)
+                {
+                    if (game.Board[corner.Item1, corner.Item2].color == currentPlayer)
+                    {
+                        score++;
+                    }
+                    else if (game.Board[corner.Item1, corner.Item2].color != TileColor.BLANK)
+                    {
+                        score--;
+                    }
+                }
+            }            
+
+            return score;
+        }
+
+        /// <summary>
+        /// Calculates the score of a board based on a set of pre-defined weights
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static int WeightedHeuristic(Game game, TileColor color)
+        {
+            TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+
+            if (game.Size() != 8)
+            {
+                throw new ArgumentException("The game board must be size 8x8 for the weighted heuristic");
+            }
+
+            int[,] weights = new int[(int) game.Size(),(int) game.Size()];
+            int score = 0;
+
+            #region weights
+            weights[0, 0] = 4;
+            weights[0, 1] = -3;
+            weights[0, 2] = 2;
+            weights[0, 3] = 2;
+
+            weights[1, 0] = -3;
+            weights[1, 1] = -4;
+            weights[1, 2] = -1;
+            weights[1, 3] = -1;
+
+            weights[2, 0] = 2;
+            weights[2, 1] = -1;
+            weights[2, 2] = 1;
+            weights[2, 3] = 0;
+
+            weights[3, 0] = 2;
+            weights[3, 1] = -1;
+            weights[3, 2] = 0;
+            weights[3, 3] = 1;
+            #endregion
+
+            // Ensures winning states are always weighted higher than intermediate states
+            if (game.Winner == color)
+            {
+                return 5;
+            }
+            else if (game.Winner != null)
+            {
+                return -5;
+            }
+
+            for (int i = 0; i < game.Size(); i++)
+            {
+                for (int j = 0; j < game.Size(); j++)
+                {
+                    // Mirrors the weights to all 4 corners
+                    int im = i < 4 ? i : 3 - i % 4;
+                    int jm = j < 4 ? j : 3 - j % 4;
+
+                    if (game.Board[i, j] != null)
+                    {
+                        if (game.Board[i, j].color == color)
+                        {
+                            score += weights[im, jm];
+                        }
+                        else if(game.Board[i,j].color != TileColor.BLANK)
+                        {
+                            // TODO: Determine if we want to add negative values if the opponent holds the space
+                            //score -= weights[im, jm];
+                        }
+                    }
+                }
+            }
+
+            // If it is currently the opponent, invert the heuristic
+            if (currentPlayer != color)
+            {
+                score *= -1;
+            }
+
+            return score;
+        }
     }
 }

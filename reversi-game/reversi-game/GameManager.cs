@@ -10,6 +10,7 @@ namespace ReversiGame
         private Game game;
         public ReversiSolver[] Agents = new ReversiSolver[2];
         private Play[] humanPlay = new Play[2];
+        private int play;
 
 
         //construct manager for computer vs computer play
@@ -18,6 +19,7 @@ namespace ReversiGame
             game = new Game(size);
             Agents[0] = new ReversiSolver(TileColor.BLACK, heuristic1, ply1);
             Agents[1] = new ReversiSolver(TileColor.WHITE, heuristic2, ply2);
+            play = 0;
         }
 
         //construct manager for human vs computer play
@@ -26,12 +28,14 @@ namespace ReversiGame
             game = new Game(size);
             int index = color == TileColor.BLACK ? 0 : 1;
             Agents[index] = new ReversiSolver(color, heuristic, ply);
+            play = 0;
         }
 
         //create game manager for human vs human play
         public GameManager(uint size = 8)
         {
             game = new Game(size);
+            play = 0;
         }
 
         
@@ -72,6 +76,8 @@ namespace ReversiGame
         {
             int index = game.IsPlayer1 ? 0 : 1;
 
+            System.Console.WriteLine("NextPlay: " + play++);
+
             ReversiSolver agent = Agents[index];
 
             //human player
@@ -93,7 +99,8 @@ namespace ReversiGame
                 else
                 {
                     //This should never happen.  Game class should handle place where no move possible.
-                    throw new ArgumentException();
+                    //throw new ArgumentException();
+
                 }
             }
             return GetGame();

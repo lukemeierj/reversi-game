@@ -12,7 +12,19 @@ namespace ReversiGame
         //when true, the active player is player1.
         public bool IsPlayer1 { private set; get; }
         public Board Board { private set; get; }
-        private bool deadlock = false;
+        private bool deadlock
+        {
+            get
+            {
+                if(PossiblePlays().Count == 0 && PossiblePlays(true).Count == 0)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+        }
         public TileColor? Winner
         {
             get {
@@ -84,14 +96,6 @@ namespace ReversiGame
             {
                 Board[tile.Coords.Item1, tile.Coords.Item2].Flip();
             }
-            int i = 0;
-            // Handle case where next player has no moves
-            while(i <= 2 && PossiblePlays().Count == 0)
-            {
-                i++;
-                NextTurn();
-            }
-            if (i >= 2) deadlock = true;
         }
 
         /// <summary>
@@ -143,7 +147,6 @@ namespace ReversiGame
         }
 
       
-        //right now, our only game over condition is a full board.
         public bool GameOver()
         {
             return deadlock || Board.BoardFull();

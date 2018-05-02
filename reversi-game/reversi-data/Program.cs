@@ -12,10 +12,10 @@ namespace ReversiData
     {
         static void Main(string[] args)
         {
-            int ply = 5;
+            int ply = 7;
             uint size = 8;
 
-            var results = TestHeuristic(ReversiSolver.TileCountHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            var results = TestHeuristic(ReversiSolver.CornersHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
             Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size);
             Console.ReadLine();
         }
@@ -27,7 +27,7 @@ namespace ReversiData
             GameManager manager = new GameManager(h1, ply1, h2, ply2, size);
             manager.Reset();
             Game game = manager.GetGame();
-            while(game.Winner == null)
+            while(!game.GameOver())
             {
                 game = manager.Next();
             }

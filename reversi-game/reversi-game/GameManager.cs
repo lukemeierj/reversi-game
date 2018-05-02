@@ -99,7 +99,7 @@ namespace ReversiGame
                 else
                 {
                     //This should never happen.  Game class should handle place where no move possible.
-                    //throw new ArgumentException();
+                    throw new ArgumentException();
 
                 }
             }

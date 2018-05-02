@@ -12,35 +12,27 @@ namespace ReversiGame
         //when true, the active player is player1.
         public bool IsPlayer1 { private set; get; }
         public Board Board { private set; get; }
-        private bool deadlock
+        private bool deadlock = false;
+        public TileColor? Winner
         {
             get
             {
-                if(PossiblePlays().Count == 0 && PossiblePlays(true).Count == 0)
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
-            }
-        }
-        public TileColor? Winner
-        {
-            get {
                 if (GameOver())
                 {
-                    if(Board.GetNumColor(TileColor.BLACK) > Board.GetNumColor(TileColor.WHITE))
+                    if (Board.GetNumColor(TileColor.BLACK) > Board.GetNumColor(TileColor.WHITE))
                     {
                         return TileColor.BLACK;
-                    } else if (Board.GetNumColor(TileColor.WHITE) > Board.GetNumColor(TileColor.BLACK))
+                    }
+                    else if (Board.GetNumColor(TileColor.WHITE) > Board.GetNumColor(TileColor.BLACK))
                     {
                         return TileColor.WHITE;
-                    } else
+                    }
+                    else
                     {
                         return null;
                     }
-                } else if (deadlock)
+                }
+                else if (deadlock)
                 {
                     return TileColor.BLANK;
                 }
@@ -70,6 +62,7 @@ namespace ReversiGame
         {
             Board = new Board(prevGame.Board);
             IsPlayer1 = prevGame.IsPlayer1;
+            deadlock = prevGame.deadlock;
         }
 
         //place a tile at a position
@@ -77,7 +70,8 @@ namespace ReversiGame
         private Tile Place(int x, int y)
         {
             Tile placement = Board.Place(x, y, IsPlayer1 ? TileColor.BLACK : TileColor.WHITE);
-            if (placement != null){
+            if (placement != null)
+            {
                 NextTurn();
             }
             return placement;
@@ -92,10 +86,18 @@ namespace ReversiGame
         public void UsePlay(Play p)
         {
             Place(p.Coords.Item1, p.Coords.Item2);
-            foreach(Tile tile in p.AffectedTiles)
+            foreach (Tile tile in p.AffectedTiles)
             {
                 Board[tile.Coords.Item1, tile.Coords.Item2].Flip();
             }
+            int i = 0;
+            // Handle case where next player has no moves
+            while (i <= 2 && PossiblePlays().Count == 0)
+            {
+                i++;
+                NextTurn();
+            }
+            if (i >= 2) deadlock = true;
         }
 
         /// <summary>
@@ -133,12 +135,12 @@ namespace ReversiGame
                 playerColor = IsPlayer1 ? TileColor.WHITE : TileColor.BLACK; ;
             }
 
-            foreach (Tuple<int,int> coord in possiblePositions)
+            foreach (Tuple<int, int> coord in possiblePositions)
             {
 
                 Play possiblePlay = new Play(Board, playerColor, coord);
 
-                if(possiblePlay.AffectedTiles != null)
+                if (possiblePlay.AffectedTiles != null)
                 {
                     results.Add(coord, possiblePlay);
                 }
@@ -146,7 +148,8 @@ namespace ReversiGame
             return results;
         }
 
-      
+
+        //right now, our only game over condition is a full board or the game is in deadlock.
         public bool GameOver()
         {
             return deadlock || Board.BoardFull();

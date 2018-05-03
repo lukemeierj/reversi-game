@@ -12,11 +12,66 @@ namespace ReversiData
     {
         static void Main(string[] args)
         {
-            int ply = 7;
+            int ply = 5;
             uint size = 8;
 
-            var results = TestHeuristic(ReversiSolver.CornersHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
-            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size);
+            Console.WriteLine("Count vs. Mobility");
+            var results = TestHeuristic(ReversiSolver.TileCountHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Count vs. Corners");
+            results = TestHeuristic(ReversiSolver.TileCountHeuristic, ReversiSolver.CornersHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Count vs. Weighted");
+            results = TestHeuristic(ReversiSolver.TileCountHeuristic, ReversiSolver.WeightedHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("\n ----------------------------------- \n");
+
+            Console.WriteLine("Mobility vs. Tile");
+            results = TestHeuristic(ReversiSolver.ActualMobilityHeuristic, ReversiSolver.TileCountHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Mobility vs. Corners");
+            results = TestHeuristic(ReversiSolver.ActualMobilityHeuristic, ReversiSolver.CornersHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Mobility vs. Weighted");
+            results = TestHeuristic(ReversiSolver.ActualMobilityHeuristic, ReversiSolver.WeightedHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("\n ----------------------------------- \n");
+
+
+            Console.WriteLine("Corners vs. Count");
+            results = TestHeuristic(ReversiSolver.CornersHeuristic, ReversiSolver.TileCountHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Corners vs. Mobility");
+            results = TestHeuristic(ReversiSolver.CornersHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Corners vs. Weighted");
+            results = TestHeuristic(ReversiSolver.CornersHeuristic, ReversiSolver.WeightedHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("\n ----------------------------------- \n");
+
+
+            Console.WriteLine("Weighted vs. Count");
+            results = TestHeuristic(ReversiSolver.WeightedHeuristic, ReversiSolver.TileCountHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Weighted vs. Mobility");
+            results = TestHeuristic(ReversiSolver.WeightedHeuristic, ReversiSolver.ActualMobilityHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+            Console.WriteLine("Weighted vs. Corners");
+            results = TestHeuristic(ReversiSolver.WeightedHeuristic, ReversiSolver.CornersHeuristic, ply, ply, size);
+            Console.WriteLine("Black: " + results.Item1 + " | White: " + results.Item2 + " Ply: " + ply + " Size: " + size + "\n");
+
+
             Console.ReadLine();
         }
 

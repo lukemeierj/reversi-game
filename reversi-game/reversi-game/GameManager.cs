@@ -76,8 +76,8 @@ namespace ReversiGame
         {
             int index = game.IsPlayer1 ? 0 : 1;
 
-            System.Console.WriteLine("NextPlay: " + play++);
-
+           // System.Console.WriteLine("NextPlay: " + play);
+            play++;
             ReversiSolver agent = Agents[index];
 
             //human player

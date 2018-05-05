@@ -101,6 +101,8 @@ namespace ReversiAI
             this.heuristic = (game) => heuristic(game, Color);
         }
 
+        #region heuristics
+
         /// <summary>
         /// Calculates the heuristic value based on the difference of black tiles and white tiles
         /// </summary>
@@ -175,11 +177,13 @@ namespace ReversiAI
         {
             TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
 
-            List<Tuple<int, int>> corners = new List<Tuple<int, int>>();
-            corners.Add(Tuple.Create(0, 0));
-            corners.Add(Tuple.Create((int) game.Board.Size - 1, 0));
-            corners.Add(Tuple.Create(0, (int) game.Board.Size - 1));
-            corners.Add(Tuple.Create((int) game.Board.Size - 1, (int) game.Board.Size - 1));
+            List<Tuple<int, int>> corners = new List<Tuple<int, int>>
+            {
+                Tuple.Create(0, 0),
+                Tuple.Create((int) game.Board.Size - 1, 0),
+                Tuple.Create(0, (int) game.Board.Size - 1),
+                Tuple.Create((int) game.Board.Size - 1, (int) game.Board.Size - 1)
+            };
 
             // Ensures winning states are always weighted higher than intermediate states
             if (game.Winner == color)
@@ -292,4 +296,6 @@ namespace ReversiAI
             return score;
         }
     }
+
+    #endregion
 }

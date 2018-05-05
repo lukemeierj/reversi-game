@@ -185,31 +185,23 @@ namespace ReversiAI
                 Tuple.Create((int) game.Board.Size - 1, (int) game.Board.Size - 1)
             };
 
-            // Ensures winning states are always weighted higher than intermediate states
-            if (game.Winner == color)
-            {
-                return 5;
-            }
-            else if (game.Winner != null)
-            {
-                return - 5;
-            }
-
-            int score = 0;
+            int maxScore = 0, minScore = 0;
             foreach(Tuple<int,int> corner in corners)
             {
                 if (game.Board[corner.Item1, corner.Item2] != null)
                 {
                     if (game.Board[corner.Item1, corner.Item2].color == currentPlayer)
                     {
-                        score++;
+                        maxScore++;
                     }
                     else if (game.Board[corner.Item1, corner.Item2].color != TileColor.BLANK)
                     {
-                        score--;
+                        minScore++;
                     }
                 }
-            }            
+            }
+            int score = 0;
+            if(maxScore + minScore > 0) score = (100 * (maxScore - minScore)) / (minScore + maxScore);
 
             return score;
         }
@@ -255,14 +247,7 @@ namespace ReversiAI
             #endregion
 
             // Ensures winning states are always weighted higher than intermediate states
-            if (game.Winner == color)
-            {
-                return 5;
-            }
-            else if (game.Winner != null)
-            {
-                return -5;
-            }
+
 
             for (int i = 0; i < game.Size(); i++)
             {

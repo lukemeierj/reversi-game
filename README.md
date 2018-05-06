@@ -1,4 +1,5 @@
 
+
 # Reversi (Othello) AI
 #### By Luke Meier and Drew Hayward
 
@@ -67,8 +68,10 @@ Manages the game's board as a `n x n` matrix of `Tile`s.
 * In order to change the color of a tile, call `tile.Flip()`
 ### Reversi AI
 * **Heuristics**:  All heuristics take a `Game` object and a `TileColor` to optimize for.  
-	* `TileCountHeuristic` - a literal count of how many more tiles one player has than the other
-	* `ActualMobilityHeuristic` - the number of impossible plays for the opponent.  That is, the fewer options the opponent has, the higher the heuristic.  
+	* `TileCountHeuristic` -  calculated with `100*(MaxPlayerCount - MinPlayerCount)/(MaxPlayerCoins + MinPlayerCoins)`
+	* `ActualMobilityHeuristic` - if there are moves for either player, `100*(MaxPlayerMobilityVal - MinPlayerMobilityVal)/(MaxPlayerMobilityVal + MinPlayerMobilityVal)`.  Otherwise, `0`.
+   * `WeightedHeuristic` - the difference between the weighted value of all the times owned by the max player and all the weighted values owned by the min player.  NOTE:  Only works on 8x8 boards.
+   * ` CornersHeuristic` - this is calculated as `100*(MaxPlayerCorners - MinPLayerCorners)/(MaxPlayerCorners + MinPlayerCorners)`.  If max and min together are `0`, return `0`
 * To create an agent, `new ReversiSolver(color, heuristic, ply)`
 * To get a play from the AI, call `var p = solver.ChoosePlay(game, [prune = true])`
 	* This goes to the depth of `Ply`, as set in the constructor.  It only uses alpha beta pruning of prune is set to `true`

@@ -11,12 +11,14 @@ This program includes four projects:
 * **reversi-ai** - the AI component of this project.  This utilizes MiniMax and optional alpha-beta pruning with various heuristics to search the Reversi game up to `n` ply.  
 * **reversi-data** - driver code for testing and collecting data on computer vs. computer game play.  
 
+## Installation
+* Ensure that `hint.bmp`, `green.bmp`, `black.bmp`, and `white.bmp` are in your `.\reversi-game\reversi-game\reversi-ui\bin\Debug [or Release]` folder.  
+
 ## Reversi UI
 
 This is a simple tool to play Reversi.  
-* **Player vs. Player** - self-explanatory 
-* **Computer vs. Computer** - watch two AI agents play against each other using the tile count heuristic.  Press next to advance moves.
-* **Human vs. Computer** - Select *black* in order to play against *black*, and *white* to play against *white*
+* There are two sets of radio buttons.  One for the *black* heuristic and one for the *white*.  If the heuristic is anything other than *Human*, the computer will play with that heuristic on behalf of that tile color.  
+* You can change the depth the solver goes to.  We recommend staying beneath 8 ply.  
 * **Stop/Clear** - creates a fresh game board.  
 
 ## Reversi Game

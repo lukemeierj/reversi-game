@@ -201,6 +201,19 @@ namespace ReversiUI
                     }
                 }
             }
+
+            // Print out heuristic values for the current board for debugging
+            string player = game.IsPlayer1 ? "Black" : "White";
+            TileColor playerColor = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+
+            // Count Heuristic
+            System.Console.WriteLine("The tile counting heuristic returns: " + ReversiSolver.TileCountHeuristic(game, playerColor) + " for " + player);
+            // Corners Heuristic
+            System.Console.WriteLine("The corners heuristic returns: " + ReversiSolver.CornersHeuristic(game, playerColor) + " for " + player);
+            // Weighted Heuristic
+            System.Console.WriteLine("The weighted heuristic returns: " + ReversiSolver.WeightedHeuristic(game, playerColor) + " for " + player);
+            // Mobility Heuristic
+            System.Console.WriteLine("The mobility heuristic returns: " + ReversiSolver.TileCountHeuristic(game, playerColor) + " for " + player);
         }
 
         private void ChangeGameMode(object sender, EventArgs e)

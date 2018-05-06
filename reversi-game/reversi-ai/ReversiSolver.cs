@@ -123,16 +123,21 @@ namespace ReversiAI
                 return -(int)game.Board.Size * (int)game.Board.Size;
             }
 
+            if(black + white == 0)
+            {
+                return 0;
+            }
+
             if (color == TileColor.BLACK)
             {
-                return black - white;
+                return 100 * (black - white) / (black + white);
             }
             else if (color == TileColor.WHITE)
             {
-                return white - black;
+                return 100 * (white - black) / (black + white);
             }
-            else
-                return 0;
+
+            return 0;
         }
         
         /// <summary>
@@ -144,25 +149,32 @@ namespace ReversiAI
         public static int ActualMobilityHeuristic(Game game, TileColor color)
         {
             TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
+            TileColor maxPlayer = color;
+            TileColor minPlayer = color == TileColor.BLACK ? TileColor.WHITE : TileColor.BLACK;
 
-            // Ensures winning states are always weighted higher than intermediate states
-            if (game.Winner == color)
-            {
-                return (int)game.Board.Size * (int)game.Board.Size;
-            } else if(game.Winner != null)
-            {
-                return - (int)game.Board.Size * (int)game.Board.Size;
-            }
+            int maxMobility = 0;
+            int minMobility = 0;
 
-            // Returns the number of plays the opponent can make subtracted from the size * 2
-            if(color == currentPlayer)
+            // Sets the max and min mobilities
+            if(currentPlayer == maxPlayer)
             {
-                return ((int) game.Board.Size * 2) - game.PossiblePlays(true).Count;
+                maxMobility = game.PossiblePlays().Count;
+                minMobility = game.PossiblePlays(true).Count;
             } else
             {
-                return ((int)game.Board.Size * 2) - game.PossiblePlays().Count;
+                maxMobility = game.PossiblePlays(true).Count;
+                maxMobility = game.PossiblePlays().Count;
             }
             
+            // Return the normalized difference between the mobilities
+            if((maxMobility + minMobility) != 0)
+            {
+                return 100 * (maxMobility - minMobility) / (maxMobility + minMobility);
+            } else
+            {
+                return 0;
+            }
+
         }
 
         /// <summary>
@@ -246,8 +258,6 @@ namespace ReversiAI
             weights[3, 3] = 1;
             #endregion
 
-            // Ensures winning states are always weighted higher than intermediate states
-
 
             for (int i = 0; i < game.Size(); i++)
             {
@@ -256,7 +266,7 @@ namespace ReversiAI
                     // Mirrors the weights to all 4 corners
                     int im = i < 4 ? i : 3 - i % 4;
                     int jm = j < 4 ? j : 3 - j % 4;
-
+                    
                     if (game.Board[i, j] != null)
                     {
                         if (game.Board[i, j].color == color)
@@ -265,8 +275,7 @@ namespace ReversiAI
                         }
                         else if(game.Board[i,j].color != TileColor.BLANK)
                         {
-                            // TODO: Determine if we want to add negative values if the opponent holds the space
-                            //score -= weights[im, jm];
+                            score -= weights[im, jm];
                         }
                     }
                 }

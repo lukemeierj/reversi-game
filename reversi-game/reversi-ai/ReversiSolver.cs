@@ -113,16 +113,6 @@ namespace ReversiAI
             int black = game.Board.GetNumColor(TileColor.BLACK);
             int white = game.Board.GetNumColor(TileColor.WHITE);
 
-            // Ensures winning states are always weighted higher than intermediate states
-            if (game.Winner == color)
-            {
-                return (int)game.Board.Size * (int)game.Board.Size;
-            }
-            else if (game.Winner != null)
-            {
-                return -(int)game.Board.Size * (int)game.Board.Size;
-            }
-
             if(black + white == 0)
             {
                 return 0;
@@ -141,7 +131,7 @@ namespace ReversiAI
         }
         
         /// <summary>
-        /// Calculates the number of moves the opponent
+        /// Calculates a heuristic based on how many moves a player has relative to how many moves the opponent has
         /// </summary>
         /// <param name="game"></param>
         /// <param name="color"></param>
@@ -163,11 +153,11 @@ namespace ReversiAI
             } else
             {
                 maxMobility = game.PossiblePlays(true).Count;
-                maxMobility = game.PossiblePlays().Count;
+                minMobility = game.PossiblePlays().Count;
             }
             
             // Return the normalized difference between the mobilities
-            if((maxMobility + minMobility) != 0)
+            if((maxMobility + minMobility) > 0)
             {
                 return 100 * (maxMobility - minMobility) / (maxMobility + minMobility);
             } else
@@ -178,9 +168,7 @@ namespace ReversiAI
         }
 
         /// <summary>
-        /// Calculates the number of corners held by the player.
-        /// +1 for player
-        /// -1 for opponent
+        /// Calculates a score based on how many more corners one player has than the other
         /// </summary>
         /// <param name="game"></param>
         /// <param name="color"></param>
@@ -226,8 +214,6 @@ namespace ReversiAI
         /// <returns></returns>
         public static int WeightedHeuristic(Game game, TileColor color)
         {
-            TileColor currentPlayer = game.IsPlayer1 ? TileColor.BLACK : TileColor.WHITE;
-
             if (game.Size() != 8)
             {
                 throw new ArgumentException("The game board must be size 8x8 for the weighted heuristic");
@@ -281,11 +267,6 @@ namespace ReversiAI
                 }
             }
 
-            // If it is currently the opponent, invert the heuristic
-            if (currentPlayer != color)
-            {
-                score *= -1;
-            }
 
             return score;
         }

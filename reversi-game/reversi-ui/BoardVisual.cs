@@ -18,15 +18,19 @@ namespace ReversiUI
 
         enum GameMode
         {
-            PvP,
-            PvC,
-            CvP,
-            CvC
+            Human,
+            Tile,
+            Mobility,
+            Corners, 
+            Weighted,
         }
 
         GameManager manager;
         Game game;
-        private GameMode mode = GameMode.PvP;
+        private GameMode whiteMode = GameMode.Human;
+        private GameMode blackMode = GameMode.Human;
+        private int whitePlyVal = 5;
+        private int blackPlyVal = 5;
         private DataGridView gameBoard;
         private const int BOARD_SIZE = 8;
         private Bitmap blank;
@@ -218,36 +222,95 @@ namespace ReversiUI
 
         private void ChangeGameMode(object sender, EventArgs e)
         {
-            Control c = (Control)sender;
+            RadioButton c = (RadioButton)sender;
+            if (!c.Checked) return;
             switch (c.Tag)
             {
-                case "PvP":
-                    if (mode == GameMode.PvP) break;
-                    mode = GameMode.PvP;
-                    manager = new GameManager();
+                case "cornersWhite":
+                    whiteMode = GameMode.Corners;
                     break;
-                case "PvC":
-                    if (mode == GameMode.PvC) break;
-                    mode = GameMode.PvC;
-                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, TileColor.WHITE);
+                case "cornersBlack":
+                    blackMode = GameMode.Corners;
                     break;
-                case "CvP":
-                    if (mode == GameMode.CvP) break;
-                    mode = GameMode.CvP;
-                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, TileColor.BLACK);
+                case "humanWhite":
+                    whiteMode = GameMode.Human;
                     break;
-                case "CvC":
-                    if (mode == GameMode.CvC) break;
-                    mode = GameMode.CvC;
-                    manager = new GameManager(ReversiSolver.TileCountHeuristic, 5, ReversiSolver.ActualMobilityHeuristic, 5);
+                case "humanBlack":
+                    blackMode = GameMode.Human;
+                    break;
+                case "weightedWhite":
+                    whiteMode = GameMode.Weighted;
+                    break;
+                case "weightedBlack":
+                    blackMode = GameMode.Weighted;
+                    break;
+                case "tileWhite":
+                    whiteMode = GameMode.Tile;
+                    break;
+                case "tileBlack":
+                    blackMode = GameMode.Tile;
                     break;
             }
+            SetNewGame();
+        }
+
+        private void SetNewGame()
+        {
+            Func<Game, TileColor, int> whiteHeuristic = null;
+            Func<Game, TileColor, int> blackHeuristic = null;
+            switch (whiteMode)
+            {
+                case GameMode.Corners:
+                    whiteHeuristic = ReversiSolver.CornersHeuristic;
+                    break;
+                case GameMode.Tile:
+                    whiteHeuristic = ReversiSolver.TileCountHeuristic;
+                    break;
+                case GameMode.Weighted:
+                    whiteHeuristic = ReversiSolver.WeightedHeuristic;
+                    break;
+                case GameMode.Mobility:
+                    whiteHeuristic = ReversiSolver.ActualMobilityHeuristic;
+                    break;
+            }
+
+            switch (blackMode)
+            {
+                case GameMode.Corners:
+                    blackHeuristic = ReversiSolver.CornersHeuristic;
+                    break;
+                case GameMode.Tile:
+                    blackHeuristic = ReversiSolver.TileCountHeuristic;
+                    break;
+                case GameMode.Weighted:
+                    blackHeuristic = ReversiSolver.WeightedHeuristic;
+                    break;
+                case GameMode.Mobility:
+                    blackHeuristic = ReversiSolver.ActualMobilityHeuristic;
+                    break;
+            }
+
+            if (whiteMode == GameMode.Human && blackMode == GameMode.Human)
+            {
+                manager = new GameManager();
+            }
+            else if (whiteMode == GameMode.Human)
+            {
+                manager = new GameManager(blackHeuristic, blackPlyVal, TileColor.BLACK);
+            }
+            else if (blackMode == GameMode.Human)
+            {
+                manager = new GameManager(whiteHeuristic, whitePlyVal, TileColor.WHITE);
+            }
+            else
+            {
+                manager = new GameManager(whiteHeuristic, whitePlyVal, blackHeuristic, blackPlyVal);
+            }
+
             game = manager.GetGame();
             playable = game.PossiblePlays();
             UpdateBoard();
         }
-
-
 
         private void NextMove(object sender, EventArgs e)
         {
@@ -265,6 +328,21 @@ namespace ReversiUI
             game = manager.GetGame();
             playable = game.PossiblePlays();
             UpdateBoard();
+        }
+
+        private void SetPly(object sender, EventArgs e)
+        {
+            NumericUpDown c = (NumericUpDown)sender;
+            switch (c.Tag)
+            {
+                case "white":
+                    whitePlyVal = Convert.ToInt32(c.Value);
+                    break;
+                case "black":
+                    blackPlyVal = Convert.ToInt32(c.Value);
+                    break;
+            }
+            SetNewGame();
         }
     }
 }

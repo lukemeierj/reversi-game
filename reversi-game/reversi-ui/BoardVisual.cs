@@ -304,7 +304,7 @@ namespace ReversiUI
             }
             else
             {
-                manager = new GameManager(whiteHeuristic, whitePlyVal, blackHeuristic, blackPlyVal);
+                manager = new GameManager(blackHeuristic, blackPlyVal, whiteHeuristic, whitePlyVal);
             }
 
             game = manager.GetGame();

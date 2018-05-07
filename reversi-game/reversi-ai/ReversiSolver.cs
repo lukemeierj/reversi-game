@@ -190,7 +190,7 @@ namespace ReversiAI
             {
                 if (game.Board[corner.Item1, corner.Item2] != null)
                 {
-                    if (game.Board[corner.Item1, corner.Item2].color == currentPlayer)
+                    if (game.Board[corner.Item1, corner.Item2].color == color)
                     {
                         maxScore++;
                     }

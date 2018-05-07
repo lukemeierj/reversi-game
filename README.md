@@ -12,7 +12,7 @@ This program includes four projects:
 * **reversi-data** - driver code for testing and collecting data on computer vs. computer game play.  
 
 ## Installation
-* Ensure that `hint.bmp`, `green.bmp`, `black.bmp`, and `white.bmp` are in your `.\reversi-game\reversi-game\reversi-ui\bin\Debug [or Release]` folder.  
+* Ensure that `hint.bmp`, `green.bmp`, `black.bmp`, and `white.bmp` set to be copied to the output directory in VS. This setting is in properties of each individual image.  
 
 ## Reversi UI
 
@@ -25,7 +25,7 @@ This is a simple tool to play Reversi.
 #### Game Manager
 This class is the main interface with the Reversi game.  Ideally, you never need to go past this.
 * Construct a new GameManager in one of three ways
-	* For player vs. player game play, use `GameManager([uint size = 8])` 
+	* For player vs. player game play, use `GameManager([uint size = 8])`
 	* For player vs. computer play, use `GameManager(heuristic, ply, opponentColor, [size = 8])`
 		* This creates an AI to play for `opponentColor` using the heuristic `heuristic`, searching up to depth `ply`	.
 	* For computer vs. computer play, use `GameManager(heuristic1, ply1, heuristic2, ply2, [size = 8])`
@@ -49,10 +49,10 @@ This class implements a single instance of a Reversi game.
 		* `TileColor.WHITE`
 		* `TileColor.BLACK`
 #### Play
-This class keeps track of possible plays and the tiles the plays would effect. 
-Plays contain 
+This class keeps track of possible plays and the tiles the plays would effect.
+Plays contain
 * `TileColor game.Color`
-* `Tuple<int, int> game.Coords` 
+* `Tuple<int, int> game.Coords`
 * `List<Tile> game.AffectedTiles`
 * Create a `new Play(color, coordinates, tilesAffected)` or `new Play(color, coords)` and let the class calculate the affected tiles.  
 #### Board
@@ -78,7 +78,7 @@ Manages the game's board as a `n x n` matrix of `Tile`s.
 * To get a play from the AI, call `var p = solver.ChoosePlay(game, [prune = true])`
 	* This goes to the depth of `Ply`, as set in the constructor.  It only uses alpha beta pruning of prune is set to `true`
 	* `game.SetHeuristic(heuristic)` sets the solver's heuristic to always optimize on behalf of it's own color.  That is, if the solver is *black*, the heuristic will score on behalf of *black*.
-	* 
+	*
 
 ### Reversi Data
 This is driver code for testing.  It allows you to set most important things to compare and log the results.  

@@ -79,13 +79,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="black.bmp" />
+    <None Include="black.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="green.bmp" />
+    <None Include="green.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="white.bmp" />
+    <None Include="white.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="..\reversi-game\reversi-game.projitems" Label="Shared" />
   <Import Project="..\reversi-ai\reversi-ai.projitems" Label="Shared" />
